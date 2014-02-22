@@ -12,7 +12,7 @@ global {
 }
 
 @font-face {
-	src: url("assets/HelveticaNeue.ttc");
+	src: url("assets/SourceSansPro-Bold.otf");
 	fontFamily: helvetica;
 	fontStyle: normal;
 	fontWeight: bold;
@@ -26,7 +26,7 @@ global {
 }
 
 @font-face {
-	src: url("assets/HelveticaNeue.ttc");
+	src: url("assets/SourceSansPro-Bold.otf");
 	fontFamily: helveticaHalo;
 	fontStyle: normal;
 	fontWeight: bold;
@@ -42,7 +42,7 @@ global {
 .headline {
 	font-family: helvetica;
 	font-size: 28;
-	font-weight: bold;
+	font-weight: normal;
 	color: #444444;
 }
 
@@ -67,21 +67,21 @@ mx|UIComponent {
 
 components|Header s|Button {
 	font-family: helvetica;
-	font-size: 22;
-	font-weight: bold;
+	font-size: 20;
+	font-weight: normal;
 	color: #666666;
 }
 
 s|Panel #titleDisplay, s|TitleWindow #titleDisplay {
 	font-family: helvetica;
 	font-size: 14;
-	font-weight: bold;
+	font-weight: normal;
 	color: #222222;
 }
 
 .progressbar-text {
 	font-family: helvetica;
 	font-size: 13;
-	font-weight: bold;
+	font-weight: normal;
 	color: #666666;
 }

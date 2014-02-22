@@ -28,7 +28,7 @@
 		height="100%"
 		verticalAlign="middle"
 		maxDisplayedLines="1"
-		text="Copyright 2013 Claus Wahlers" />
+		text="Copyright 2011-2014, Codeazur Brasil Ltda." />
 	
 	<s:Label
 		styleName="footer"

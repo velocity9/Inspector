@@ -1,0 +1,131 @@
+<?xml version="1.0" encoding="utf-8"?>
+<s:ItemRenderer
+	xmlns:fx="http://ns.adobe.com/mxml/2009" 
+	xmlns:s="library://ns.adobe.com/flex/spark" 
+	xmlns:mx="library://ns.adobe.com/flex/mx"
+	autoDrawBackground="false"
+	width="100%">
+
+	<s:states>
+		<s:State name="normal" />
+		<s:State name="hovered" />
+		<s:State name="selected" />
+	</s:states>
+	
+	<fx:Script>
+		<![CDATA[
+			import v9.model.swf.vo.SWFBitmapVO;
+			
+			[Bindable]
+			protected var bitmapVO:SWFBitmapVO;
+			
+			[Bindable]
+			protected var characterNameColor:uint = 0;
+			
+			[Bindable]
+			protected var infoText:String = "";
+			
+			[Bindable]
+			protected var infoColor:uint = 0;
+			
+			[Bindable]
+			protected var infoShow:Boolean = false;
+			
+			[Bindable]
+			protected var typeText:String = "";
+			
+			[Bindable]
+			protected var sizeText:String = "";
+			
+			public override function set data(value:Object):void {
+				bitmapVO = value as SWFBitmapVO;
+				characterNameColor = 0x222222;
+				infoShow = false;
+				if(bitmapVO) {
+					if(bitmapVO.tag && bitmapVO.tag.characterId > 0) {
+						infoShow = true;
+						infoText = bitmapVO.tag.characterId.toString();
+						infoColor = 0x333333;
+						characterNameColor = bitmapVO.hasClassName ? 0x222222 : 0x777777;
+						typeText = bitmapVO.typeName;
+						sizeText = bitmapVO.width + " x " + bitmapVO.height;
+					}
+				}
+			}
+		]]>
+	</fx:Script>
+	
+	<s:Rect left="0" top="0" right="0" bottom="0">
+		<s:fill>
+			<s:SolidColor
+				color="#FFFFFF"
+				color.hovered="#E8E8FF" 
+				color.selected="#D8D8FF" />
+		</s:fill>
+	</s:Rect>
+	<s:Rect left="0" bottom="0" right="0" height="1">
+		<s:fill>
+			<s:SolidColor
+				alpha="1"
+				color="#DDDDDD"
+				color.hovered="#DDDDEE"
+				color.selected="#D4D4EE" />
+		</s:fill>
+	</s:Rect>
+
+	<s:VGroup width="100%">
+		<s:HGroup
+			width="100%"
+			height="25"
+			paddingLeft="2"
+			paddingRight="8"
+			verticalAlign="middle">
+			
+			<s:Label
+				width="100%"
+				maxDisplayedLines="1"
+				showTruncationTip="false"
+				text="{bitmapVO.toString()}"
+				color="{characterNameColor}"
+				paddingTop="3"
+				paddingLeft="8"
+				fontSize="12" />
+			
+			<s:Label
+				maxDisplayedLines="1"
+				text="{infoText}"
+				visible="{infoShow}"
+				includeInLayout="{infoShow}"
+				color="{infoColor}"
+				paddingTop="3"
+				fontSize="12" />
+			
+		</s:HGroup>
+
+		<s:HGroup
+			paddingLeft="10"
+			paddingRight="10"
+			paddingTop="-7"
+			paddingBottom="6"
+			width="100%">
+			
+			<s:Label
+				width="100%"
+				maxDisplayedLines="1"
+				showTruncationTip="false"
+				text="{sizeText}"
+				color="0x6666FF"
+				fontSize="10"
+				fontStyle="italic" />
+		
+			<s:Label
+				text="{typeText}"
+				color="0x6666FF"
+				fontSize="10"
+				fontStyle="italic" />
+			
+		</s:HGroup>
+		
+	</s:VGroup>
+	
+</s:ItemRenderer>

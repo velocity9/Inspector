@@ -1,0 +1,33 @@
+<?xml version="1.0" encoding="utf-8"?>
+<s:TitleWindow
+	xmlns:fx="http://ns.adobe.com/mxml/2009" 
+	xmlns:s="library://ns.adobe.com/flex/spark" 
+	xmlns:mx="library://ns.adobe.com/flex/mx"
+	skinClass="com.codeazur.spark.skins.TitleWindowSkin"
+	title="Downloading V9 Update ..."
+	width="200">
+	
+	<fx:Script>
+		<![CDATA[
+			[Bindable]
+			public var progress:Number = 0;
+		]]>
+	</fx:Script>
+	
+	<s:Group height="100%" percentWidth="{progress}">
+		<s:Rect left="0" right="0" top="0" bottom="0">
+			<s:fill>
+				<s:SolidColor color="#d8d8d8" />
+			</s:fill>
+		</s:Rect>
+	</s:Group>
+	
+	<s:Label
+		styleName="progressbar-text"
+		width="100%"
+		height="100%"
+		textAlign="center"
+		verticalAlign="middle"
+		text="{Math.round(progress)}%" />
+	
+</s:TitleWindow>

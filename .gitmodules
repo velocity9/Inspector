@@ -1,0 +1,3 @@
+[submodule "as3swf"]
+	path = as3swf
+	url = git@github.com:claus/as3swf.git

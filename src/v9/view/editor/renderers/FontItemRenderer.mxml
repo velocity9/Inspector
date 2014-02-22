@@ -1,0 +1,153 @@
+<?xml version="1.0" encoding="utf-8"?>
+<s:ItemRenderer
+	xmlns:fx="http://ns.adobe.com/mxml/2009" 
+	xmlns:s="library://ns.adobe.com/flex/spark" 
+	xmlns:mx="library://ns.adobe.com/flex/mx"
+	autoDrawBackground="false"
+	width="100%">
+
+	<s:states>
+		<s:State name="normal" />
+		<s:State name="hovered" />
+		<s:State name="selected" />
+	</s:states>
+	
+	<fx:Script>
+		<![CDATA[
+			import com.codeazur.utils.StringUtils;
+			import v9.model.swf.vo.SWFFontVO;
+
+			import com.codeazur.as3swf.tags.TagDefineFont;
+			
+			[Bindable]
+			protected var fontVO:SWFFontVO;
+			
+			[Bindable]
+			protected var characterNameColor:uint = 0;
+			
+			[Bindable]
+			protected var infoText:String = "";
+			
+			[Bindable]
+			protected var infoColor:uint = 0;
+			
+			[Bindable]
+			protected var infoShow:Boolean = false;
+			
+			[Bindable]
+			protected var sizeText:String = "";
+			
+			[Bindable]
+			protected var numGlyphs:int = -1;
+			
+			public override function set data(value:Object):void {
+				characterNameColor = 0x222222;
+				infoShow = false;
+				numGlyphs = -1;
+				fontVO = value as SWFFontVO;
+				if(fontVO) {
+					if(fontVO.tag && fontVO.tag.characterId > 0) {
+						infoShow = true;
+						infoText = fontVO.tag.characterId.toString();
+						infoColor = 0x333333;
+						characterNameColor = 0x222222;
+						var fontTag:TagDefineFont = fontVO.tag as TagDefineFont;
+						if(fontTag != null) {
+							numGlyphs = fontTag.glyphShapeTable.length;
+						}
+					}
+				}
+			}
+		]]>
+	</fx:Script>
+	
+	<s:Rect left="0" top="0" right="0" bottom="0">
+		<s:fill>
+			<s:SolidColor
+				color="#FFFFFF"
+				color.hovered="#E8E8FF" 
+				color.selected="#D8D8FF" />
+		</s:fill>
+	</s:Rect>
+	<s:Rect left="0" bottom="0" right="0" height="1">
+		<s:fill>
+			<s:SolidColor
+				alpha="1"
+				color="#DDDDDD"
+				color.hovered="#DDDDEE"
+				color.selected="#D4D4EE" />
+		</s:fill>
+	</s:Rect>
+
+	<s:VGroup width="100%">
+		<s:HGroup
+			width="100%"
+			height="25"
+			paddingLeft="2"
+			paddingRight="8"
+			verticalAlign="middle">
+			
+			<s:Label
+				width="100%"
+				maxDisplayedLines="1"
+				showTruncationTip="false"
+				text="{fontVO.toString()}"
+				color="{characterNameColor}"
+				paddingTop="3"
+				paddingLeft="8"
+				fontSize="12" />
+			
+			<s:Label
+				maxDisplayedLines="1"
+				text="{infoText}"
+				visible="{infoShow}"
+				includeInLayout="{infoShow}"
+				color="{infoColor}"
+				paddingTop="3"
+				fontSize="12" />
+			
+		</s:HGroup>
+
+		<s:HGroup
+			visible="{fontVO.fontName != null}"
+			includeInLayout="{fontVO.fontName != null}"
+			paddingLeft="10"
+			paddingRight="10"
+			paddingTop="-7"
+			paddingBottom="6"
+			width="100%">
+			
+			<s:Label
+				width="100%"
+				maxDisplayedLines="1"
+				showTruncationTip="false"
+				text="{fontVO.fontName}"
+				color="0x6666FF"
+				fontSize="10"
+				fontStyle="italic" />
+		
+		</s:HGroup>
+
+		<s:HGroup
+			visible="{numGlyphs >= 0}"
+			includeInLayout="{numGlyphs >= 0}"
+			paddingLeft="10"
+			paddingRight="10"
+			paddingTop="-7"
+			paddingBottom="6"
+			width="100%">
+			
+			<s:Label
+				width="100%"
+				maxDisplayedLines="1"
+				showTruncationTip="false"
+				text="{numGlyphs + StringUtils.pluralize(' Glyph', numGlyphs)}"
+				color="0x6666FF"
+				fontSize="10"
+				fontStyle="italic" />
+		
+		</s:HGroup>
+		
+	</s:VGroup>
+	
+</s:ItemRenderer>

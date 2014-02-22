@@ -1,0 +1,119 @@
+<?xml version="1.0" encoding="utf-8"?>
+<s:SparkSkin
+	xmlns:fx="http://ns.adobe.com/mxml/2009"
+	xmlns:s="library://ns.adobe.com/flex/spark"
+	xmlns:fb="http://ns.adobe.com/flashbuilder/2009"
+	xmlns:timeline="v9.view.editor.mainpanel.timeline.*"
+	minWidth="112"
+	alpha.disabled="0.5"
+	blendMode="normal"> 
+	
+	<fx:Metadata>
+		[HostComponent("v9.view.editor.mainpanel.timeline.Timeline")]
+	</fx:Metadata>
+	
+	<s:states>
+		<s:State name="normal" />
+		<s:State name="disabled" />
+	</s:states>
+	
+	<fx:Declarations>
+		<fx:Component id="dropIndicator">
+			<s:Group minWidth="3" minHeight="3" maxWidth="3" maxHeight="3">
+				<s:Rect left="0" right="0" top="0" bottom="0">
+					<s:fill>
+						<s:SolidColor color="0xBBBBBB" />
+					</s:fill>
+					<s:stroke>
+						<s:SolidColorStroke color="0x868686" weight="1"/>
+					</s:stroke>
+				</s:Rect>
+			</s:Group>
+		</fx:Component>
+		<s:ArrayList id="singleItemDataProvider">
+			<fx:Object />
+		</s:ArrayList>
+	</fx:Declarations>
+	
+	<s:Rect left="0" right="0" top="0" height="25" >
+		<s:fill>
+			<s:SolidColor color="#F0F0F0" />
+		</s:fill>
+	</s:Rect>
+	<s:Rect left="0" right="0" top="24" height="1" >
+		<s:fill>
+			<s:SolidColor color="#D0D0D0" />
+		</s:fill>
+	</s:Rect>
+	<s:Rect left="0" right="0" top="25" height="1" >
+		<s:fill>
+			<s:SolidColor color="#A0A0A0" />
+		</s:fill>
+	</s:Rect>
+	
+	<s:Rect id="background" left="0" right="0" top="26" bottom="0" >
+		<s:fill>
+			<s:SolidColor id="bgFill" color="#FFFFFF" alpha="0" />
+		</s:fill>
+	</s:Rect>
+
+	<s:Rect left="0" right="0" bottom="0" height="1" >
+		<s:fill>
+			<s:SolidColor color="#C0C0C0" />
+		</s:fill>
+	</s:Rect>
+
+	<!-- Ruler -->
+	<s:Scroller
+		id="scrollerRuler"
+		left="0" right="0" top="0" height="25"
+		horizontalScrollPolicy="off"
+		verticalScrollPolicy="off"
+		minViewportInset="0"
+		hasFocusableChildren="false">
+		<s:DataGroup
+			id="dataGroupRuler"
+			dataProvider="{singleItemDataProvider}"
+			itemRenderer="v9.view.editor.mainpanel.timeline.renderers.TimelineRulerRenderer">
+			<s:layout>
+				<timeline:TimelineLayout horizontalScrollPosition="{timelineLayout.horizontalScrollPosition}" />
+			</s:layout>
+		</s:DataGroup>
+	</s:Scroller>
+	
+	<!-- Layers -->
+	<s:Scroller
+		id="scroller"
+		left="0" right="0" top="26" bottom="1"
+		minViewportInset="0"
+		hasFocusableChildren="false"
+		skinClass="com.codeazur.spark.skins.ScrollerSkin">
+		<s:DataGroup
+			id="dataGroup"
+			itemRenderer="v9.view.editor.mainpanel.timeline.renderers.TimelineRenderer">
+			<s:layout>
+				<timeline:TimelineLayout id="timelineLayout" />
+			</s:layout>
+		</s:DataGroup>
+	</s:Scroller>
+	
+	<!-- Caret 
+	<s:Scroller
+		id="scrollerCaret"
+		left="0" top="0" right="0" height="25"
+		horizontalScrollPolicy="off"
+		verticalScrollPolicy="off"
+		minViewportInset="0"
+		hasFocusableChildren="false">
+		<s:DataGroup
+			id="dataGroupCaret"
+			dataProvider="{singleItemDataProvider}"
+			itemRenderer="v9.view.editor.mainpanel.timeline.renderers.TimelineCaretRenderer">
+			<s:layout>
+				<timeline:TimelineLayout horizontalScrollPosition="{timelineLayout.horizontalScrollPosition}" />
+			</s:layout>
+		</s:DataGroup>
+	</s:Scroller>
+	-->
+	
+</s:SparkSkin>

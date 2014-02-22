@@ -1,0 +1,84 @@
+<?xml version="1.0" encoding="utf-8"?>
+<s:NavigatorContent
+	xmlns:fx="http://ns.adobe.com/mxml/2009" 
+	xmlns:s="library://ns.adobe.com/flex/spark" 
+	xmlns:mx="library://ns.adobe.com/flex/mx"
+	width="100%"
+	height="100%">
+	
+	<fx:Script>
+		<![CDATA[
+			import spark.events.IndexChangeEvent;
+
+			import v9.events.ExpandableListItemEvent;
+			import v9.model.swf.vo.SWFCharacterVO;
+			import v9.model.swf.vo.SWFTagVO;
+			import v9.view.editor.etc.AccordionItemFamily;
+			import v9.view.events.CharacterItemEvent;
+			import v9.view.events.TagItemEvent;
+
+			import mx.collections.ArrayCollection;
+			import mx.core.IFactory;
+			import mx.events.FlexEvent;
+
+			[Bindable]
+			public var items:ArrayCollection = new ArrayCollection();
+			
+			[Bindable]
+			public var itemRenderer:IFactory;
+			
+			public var itemFamily:String;
+			
+			protected function creationCompleteHandler(event:FlexEvent):void
+			{
+				list.scroller.setStyle("horizontalScrollPolicy", "off");
+				list.addEventListener(ExpandableListItemEvent.EXPANDABLE_LIST_ITEM_TOGGLE, listItem_toggleHandler);
+				list.addEventListener(IndexChangeEvent.CHANGE, list_changeHandler);
+			}
+
+			protected function listItem_toggleHandler(event:ExpandableListItemEvent):void
+			{
+				var tag:SWFTagVO = event.item as SWFTagVO;
+				var index:int = items.getItemIndex(tag) + 1;
+				if(tag.expanded) {
+					items.addAllAt(new ArrayCollection(tag.children), index);
+				} else {
+					var child:SWFTagVO;
+					while(index < items.length) {
+						child = items.removeItemAt(index) as SWFTagVO;
+						if(child.parent == null) {
+							items.addItemAt(child, index);
+							break;
+						}
+					}
+				}
+			}
+
+			protected function list_changeHandler(event:IndexChangeEvent):void
+			{
+				switch(itemFamily)
+				{
+					case AccordionItemFamily.CHARACTER_ITEM:
+						dispatchEvent(new CharacterItemEvent(CharacterItemEvent.CHANGE, list.selectedItem as SWFCharacterVO, true));
+						break;
+					case AccordionItemFamily.TAG_ITEM:
+						dispatchEvent(new TagItemEvent(TagItemEvent.CHANGE, list.selectedItem as SWFTagVO, true));
+						break;
+				}
+			}
+		]]>
+	</fx:Script>
+	
+	<s:BorderContainer top="2" left="-1" right="-1" bottom="-1" borderVisible="false" backgroundColor="#ffffff">
+		<s:List
+			id="list"
+			width="100%"
+			height="100%"
+			borderColor="#BBBBBB"
+			dataProvider="{items}"
+			itemRenderer="{itemRenderer}"
+			skinClass="com.codeazur.spark.skins.ListSkin"
+			creationComplete="creationCompleteHandler(event)" />
+	</s:BorderContainer>
+	
+</s:NavigatorContent>

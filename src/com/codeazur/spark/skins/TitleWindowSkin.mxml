@@ -1,0 +1,150 @@
+<?xml version="1.0" encoding="utf-8"?>
+<s:SparkSkin
+	xmlns:fx="http://ns.adobe.com/mxml/2009"
+	xmlns:s="library://ns.adobe.com/flex/spark" 
+	xmlns:fb="http://ns.adobe.com/flashbuilder/2009"
+	blendMode="normal"
+	mouseEnabled="false"
+	minWidth="100"
+	minHeight="64"
+	alpha.disabled="0.5"
+	alpha.disabledWithControlBar="0.5">
+	
+	<fx:Metadata>
+		[HostComponent("spark.components.TitleWindow")]
+	</fx:Metadata> 
+	
+	<!--
+	NOTE: this skin file contains sub-parts that may continue to react to
+	Style code.  To remove this behavior create new copies of those skins
+	and remove the styles.
+	-->
+	<s:states>
+		<s:State name="normal" />
+		<s:State name="inactive" stateGroups="inactiveGroup" />
+		<s:State name="disabled" />
+		<s:State name="normalWithControlBar" stateGroups="withControls" />
+		<s:State name="inactiveWithControlBar" stateGroups="withControls, inactiveGroup" />
+		<s:State name="disabledWithControlBar" stateGroups="withControls" />
+	</s:states>
+	
+	<!-- drop shadow can't be hittable so it stays sibling of other graphics -->
+	<s:RectangularDropShadow
+		id="dropShadow"
+		left="0" top="0" right="0" bottom="0"
+		blurX="4" blurY="4" alpha="0.3" distance="4" angle="45" color="#000000"/>
+	
+	<!-- drop shadow can't be hittable so all other graphics go in this group -->
+	<s:Group left="0" right="0" top="0" bottom="0">
+		
+		<!-- top group mask -->
+		<s:Group left="0" top="0" right="0" bottom="0" id="topGroupMask" >
+			<s:Rect id="topMaskRect" left="0" top="0" right="0" bottom="0">
+				<s:fill>
+					<s:SolidColor alpha="0"/>
+				</s:fill>
+			</s:Rect>
+		</s:Group>
+		
+		<!-- bottom group mask -->
+		<s:Group id="bottomGroupMask" left="0" top="0" right="0" bottom="0" includeIn="normalWithControlBar, disabledWithControlBar">
+			<s:Rect id="bottomMaskRect" left="0" top="0" right="0" bottom="0">
+				<s:fill>
+					<s:SolidColor alpha="0"/>
+				</s:fill>
+			</s:Rect>
+		</s:Group>
+		
+		<!-- layer 1: border -->
+		<!--
+		<s:Rect id="border" left="0" right="0" top="0" bottom="0">
+		<s:stroke>
+		<s:SolidColorStroke id="borderStroke" color="#666666" weight="1" />
+		</s:stroke>
+		</s:Rect>
+		-->
+		
+		<!-- layer 2: background fill -->
+		<s:Rect id="background" left="0" top="0" right="0" bottom="0">
+			<s:fill>
+				<s:SolidColor id="backgroundFill" color="#F0F0F0" />
+			</s:fill>
+		</s:Rect>
+		
+		<!-- layer 3: contents -->
+		<!--- Contains the vertical stack of titlebar content and controlbar. -->
+		<s:Group left="0" right="0" top="0" bottom="0" id="contents">
+			
+			<s:layout>
+				<s:VerticalLayout gap="0" horizontalAlign="justify" />
+			</s:layout>
+			
+			<s:Group id="topGroup" mask="{topGroupMask}">
+				
+				<!-- layer 0: title bar fill -->
+				<s:Rect id="tbFill" left="0" right="0" top="0" bottom="1">
+					<s:fill>
+						<s:SolidColor color="#F0F0F0" />
+					</s:fill>
+				</s:Rect>
+				
+				<!-- layer 2: title bar divider -->
+				<s:Rect id="tbDiv" left="0" right="0" bottom="0" height="1">
+					<s:fill>
+						<s:SolidColor color="#C0C0C0" />
+					</s:fill>
+				</s:Rect>
+				
+				<!-- layer 3: text -->
+				<s:Label
+					id="titleDisplay"
+					maxDisplayedLines="1"
+					left="10" right="10" top="0" bottom="0"
+					minHeight="32"
+					verticalAlign="middle"/>
+				
+				<!-- layer 4: moveArea -->
+				<s:Group id="moveArea" left="0" right="0" top="0" bottom="0" />
+				
+				<!-- closeButton
+				<s:Button id="closeButton" skinClass="spark.skins.spark.TitleWindowCloseButtonSkin"
+						  width="15" height="15" right="7" top="7" />  -->
+				
+			</s:Group>
+			
+			<s:Group id="contentGroup" width="100%" height="100%" minWidth="0" minHeight="0" />
+			
+			<s:Group id="bottomGroup" minWidth="0" minHeight="0" includeIn="normalWithControlBar, disabledWithControlBar" >
+				
+				<s:Group left="0" right="0" top="0" bottom="0" mask="{bottomGroupMask}">
+					
+					<!-- layer 0: control bar divider line -->
+					<s:Rect left="0" right="0" top="0" height="1">
+						<s:fill>
+							<s:SolidColor color="0xC0C0C0" />
+						</s:fill>
+					</s:Rect>
+					
+					<!-- layer 2: control bar fill -->
+					<s:Rect left="0" right="0" top="1" bottom="0">
+						<s:fill>
+							<s:SolidColor color="#F0F0F0" />
+						</s:fill>
+					</s:Rect>
+					
+				</s:Group>
+				
+				<!-- layer 3: control bar -->
+				<s:Group id="controlBarGroup" left="0" right="0" top="1" bottom="0" minWidth="0" minHeight="32">
+					<s:layout>
+						<s:HorizontalLayout paddingLeft="0" paddingRight="0" paddingTop="0" paddingBottom="0" gap="0" />
+					</s:layout>
+				</s:Group>
+				
+			</s:Group>
+			
+		</s:Group>
+		
+	</s:Group>
+	
+</s:SparkSkin>

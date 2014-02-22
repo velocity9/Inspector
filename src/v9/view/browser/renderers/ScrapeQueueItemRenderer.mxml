@@ -1,0 +1,122 @@
+<?xml version="1.0" encoding="utf-8"?>
+<s:ItemRenderer
+	xmlns:fx="http://ns.adobe.com/mxml/2009" 
+	xmlns:s="library://ns.adobe.com/flex/spark" 
+	xmlns:mx="library://ns.adobe.com/flex/mx"
+	autoDrawBackground="false"
+	width="100%">
+
+	<s:states>
+		<s:State name="normal" />
+		<s:State name="hovered" />
+		<s:State name="selected" />
+	</s:states>
+	
+	<fx:Script>
+		<![CDATA[
+			import v9.model.vo.EmbeddedSWFVO;
+			
+			[Bindable]
+			protected var vo:EmbeddedSWFVO;
+			
+			[Bindable]
+			protected var icon:Class;
+			
+			[Bindable]
+			protected var loadProgress:String = "";
+			
+			[Embed(source='/assets/icons/transparent.png')]
+			public static const IDLE_ICON:Class;
+			[Embed(source='/assets/icons/bullet_go.png')]
+			public static const LOADING_ICON:Class;
+			[Embed(source='/assets/icons/accept.png')]
+			public static const COMPLETE_ICON:Class;
+			[Embed(source='/assets/icons/delete.png')]
+			public static const ERROR_ICON:Class;
+			[Embed(source='/assets/icons/exclamation.png')]
+			public static const WARNING_ICON:Class;
+			
+			override public function set data(value:Object):void {
+				super.data = value;
+				vo = value as EmbeddedSWFVO;
+				icon = getStateIcon();
+				if(vo.state == EmbeddedSWFVO.STATE_LOADING) {
+					if(vo.bytesTotal > 0) {
+						loadProgress = Math.round(vo.bytesLoaded * 100 / vo.bytesTotal) + "%";
+					} else {
+						loadProgress = "0%";
+					}
+				} else {
+					loadProgress = "";
+				}
+			}
+			
+			protected function getStateIcon():Class {
+				var iconClass:Class;
+				switch(vo.state) {
+					case EmbeddedSWFVO.STATE_IDLE:
+						iconClass = IDLE_ICON;
+						break;
+					case EmbeddedSWFVO.STATE_LOADING:
+						iconClass = LOADING_ICON;
+						break;
+					case EmbeddedSWFVO.STATE_COMPLETE:
+						iconClass = COMPLETE_ICON;
+						break;
+					case EmbeddedSWFVO.STATE_ERROR:
+						iconClass = ERROR_ICON;
+						break;
+					case EmbeddedSWFVO.STATE_WARNING:
+						iconClass = WARNING_ICON;
+						break;
+				}
+				return iconClass;
+			}
+		]]>
+	</fx:Script>
+	
+	<s:Rect left="0" top="0" right="0" bottom="0">
+		<s:fill>
+			<s:SolidColor
+				color="#FFFFFF"
+				color.hovered="#F0F0F0" 
+				color.selected="#E8E8E8" />
+		</s:fill>
+	</s:Rect>
+	<s:Rect left="0" bottom="0" right="0" height="1">
+		<s:fill>
+			<s:SolidColor
+				alpha="1"
+				color="#DDDDDD"
+				color.hovered="#D4D4D4"
+				color.selected="#D4D4D4" />
+		</s:fill>
+	</s:Rect>
+	
+	<s:HGroup
+		width="100%"
+		height="25"
+		paddingLeft="8"
+		paddingRight="8"
+		verticalAlign="middle">
+		
+		<s:BitmapImage
+			source="{icon}" />
+		
+		<s:Label
+			width="100%"
+			text="{vo.swfUrl}"
+			maxDisplayedLines="1"
+			paddingTop="3"
+			fontSize="12" />
+		
+		<s:Label
+			visible="{vo.state == EmbeddedSWFVO.STATE_LOADING}"
+			includeInLayout="{vo.state == EmbeddedSWFVO.STATE_LOADING}"
+			text="{loadProgress}"
+			paddingTop="3"
+			fontSize="12" color="#888888" />
+		
+	</s:HGroup>
+	
+</s:ItemRenderer>

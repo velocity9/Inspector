@@ -1,0 +1,204 @@
+<?xml version="1.0" encoding="utf-8"?>
+<s:ItemRenderer
+	xmlns:fx="http://ns.adobe.com/mxml/2009" 
+	xmlns:s="library://ns.adobe.com/flex/spark" 
+	xmlns:mx="library://ns.adobe.com/flex/mx"
+	creationComplete="creationCompleteHandler(event)"
+	remove="removeHandler(event)"
+	autoDrawBackground="false"
+	width="100%" height="100%">
+
+	<fx:Script>
+		<![CDATA[
+			import v9.view.browser.html.CustomHTMLHost;
+			import v9.view.browser.html.FlexHTMLLoaderExt;
+			import com.codeazur.utils.StringUtils;
+			
+			import mx.events.FlexEvent;
+			
+			import v9.model.vo.BrowserTabVO;
+			import v9.view.events.BrowserTabEvent;
+			import v9.view.events.HTMLHostEvent;
+			
+			protected static const REGEXP_URLSCHEME:RegExp = new RegExp("^(http|https|ftp)\://(.*)$");
+			protected static const REGEXP_ABOUT:RegExp = new RegExp("^about\:(.*)$");
+			protected static const REGEXP_SWF:RegExp = new RegExp("^swf\:(.*)$");
+			
+			[Bindable]
+			public var browserTabVO:BrowserTabVO;
+			
+			protected var scrapeDelayTimer:Timer;
+			
+			public override function set data(value:Object):void {
+				super.data = value;
+				browserTabVO = value as BrowserTabVO;
+				if(browserTabVO.url != null) {
+					urlInput.text = browserTabVO.url;
+					load(browserTabVO.url);
+					browserTabVO.url = null;
+				}
+			}
+			
+			public function load(url:String):void {
+				trace("Load: " + url);
+				htmlControl.location = url;
+				if(scrapeDelayTimer && scrapeDelayTimer.running) {
+					scrapeDelayTimer.stop();
+				}
+			}
+			
+			protected function loadButton_clickHandler(event:MouseEvent):void {
+				if(urlInput.text == htmlControl.location) {
+					htmlControl.reload();
+				} else {
+					load(urlInput.text);
+				}
+			}
+
+			protected function htmlControl_htmlDOMInitializeHandler(event:Event):void {
+				trace("htmlControl_htmlDOMInitialize");
+				scrape();
+				scrape(true, 5000);
+			}
+			
+			protected function htmlControl_completeHandler(event:Event):void {
+				trace("htmlControl_complete");
+				scrape();
+				if(htmlControl.domWindow && htmlControl.domWindow.document) {
+					htmlControl.domWindow.document.addEventListener(
+						"DOMNodeInserted",
+						htmlControl_domNodeInsertedHandler,
+						true
+					);
+				}
+			}
+			
+			protected function htmlControl_domNodeInsertedHandler(event:Object):void {
+				trace("htmlControl_domNodeInserted");
+				scrape(true, 1000);
+			}
+			
+			protected function scrape(delayed:Boolean = false, delay:uint = 1000):void {
+				if(delayed) {
+					if(!scrapeDelayTimer.running) {
+						scrapeDelayTimer.delay = delay;
+						scrapeDelayTimer.reset();
+						scrapeDelayTimer.start();
+					}
+				} else {
+					if(scrapeDelayTimer.running) {
+						scrapeDelayTimer.stop();
+					}
+					dispatchEvent(new BrowserTabEvent(BrowserTabEvent.SCRAPE, null, htmlControl.domWindow, true));
+				}
+			}
+			
+			protected function scrapeDelayTimerHandler(event:TimerEvent):void {
+				dispatchEvent(new BrowserTabEvent(BrowserTabEvent.SCRAPE, null, htmlControl.domWindow, true));
+			}
+			
+			protected function creationCompleteHandler(event:FlexEvent):void {
+				// Set up custom HTMLHost
+				var host:CustomHTMLHost = new CustomHTMLHost();
+				host.addEventListener(HTMLHostEvent.CREATE_WINDOW, hostEventHandler, false, 0, true);
+				host.addEventListener(HTMLHostEvent.UPDATE_LOCATION, hostEventHandler, false, 0, true);
+				host.addEventListener(HTMLHostEvent.UPDATE_TITLE, hostEventHandler, false, 0, true);
+				htmlControl.htmlHost = host;
+				// Listen to error events from FlexHTMLLoaderExt
+				htmlControl.htmlLoader.addEventListener(IOErrorEvent.IO_ERROR, htmlLoader_ioErrorHandler, false, 0, true);
+				htmlControl.htmlLoader.addEventListener(SecurityErrorEvent.SECURITY_ERROR, htmlLoader_securityErrorHandler, false, 0, true);
+				// Set a proper user agent string
+				htmlControl.userAgent = "Mozilla/5.0 (Macintosh; U; Intel Mac OS X 10_6_4; en-US) AppleWebKit/533.4 (KHTML, like Gecko) Chrome/5.0.375.86 Safari/533.4";
+				// Set up scrape delay timer
+				scrapeDelayTimer = new Timer(1000, 1);
+				scrapeDelayTimer.addEventListener(TimerEvent.TIMER_COMPLETE, scrapeDelayTimerHandler);
+			}
+
+			protected function hostEventHandler(event:HTMLHostEvent):void {
+				try {
+					switch(event.type) {
+						case HTMLHostEvent.CREATE_WINDOW:
+							dispatchEvent(new BrowserTabEvent(BrowserTabEvent.ADD_TAB, event.payload as String, null, true));
+							break;
+						case HTMLHostEvent.UPDATE_LOCATION:
+							urlInput.text = event.payload as String;
+							break;
+						case HTMLHostEvent.UPDATE_TITLE:
+							browserTabVO.label = event.payload as String;
+							break;
+					}
+				} catch(e:Error) {
+				}
+			}
+			
+			protected function htmlLoader_ioErrorHandler(event:IOErrorEvent):void {
+				var aScheme:Array = htmlControl.location.match(REGEXP_URLSCHEME);
+				if(aScheme == null || aScheme.length == 0) {
+					load("http://" + htmlControl.location);
+				} else {
+					if(aScheme.length == 3) {
+						var goog:String = "http://www.google.com/search?q=";
+						var aSwf:Array = aScheme[2].match(REGEXP_SWF);
+						var aAbout:Array = aScheme[2].match(REGEXP_ABOUT);
+						if(aSwf != null && aSwf.length == 2) {
+							load(goog + StringUtils.strictEscape(aSwf[1] + " filetype:swf"));
+						} else if(aAbout != null && aAbout.length == 2) {
+							var html:XML = <html>
+									<head>
+									</head>
+									<body>
+									</body>
+								</html>;
+							if(aAbout[1] == "blank") {
+								html.head.title = "about:blank";
+							} else {
+								html.head.title = aScheme[2];
+								html.body.h1 = <h1>Whatchew talkin' 'bout, Willis?</h1>;
+							}
+							htmlControl.htmlText = html.toXMLString();
+						} else {
+							load(goog + StringUtils.strictEscape(aScheme[2]));
+						}
+					}
+				}
+			}
+			
+			protected function htmlLoader_securityErrorHandler(event:Event):void {
+			}
+
+			protected function removeHandler(event:FlexEvent):void {
+				trace("### removed");
+			}
+		]]>
+	</fx:Script>
+	
+	<s:VGroup width="100%" height="100%" gap="0">
+		
+		<s:SkinnableContainer width="100%" height="30" defaultButton="{loadButton}">
+			
+			<s:layout>
+				<s:HorizontalLayout gap="0" />
+			</s:layout>
+			
+			<s:TextInput
+				id="urlInput"
+				width="100%" height="100%" />
+			
+			<s:Button
+				id="loadButton"
+				label="load"
+				click="loadButton_clickHandler(event)"
+				height="100%" />
+			
+		</s:SkinnableContainer>
+
+		<mx:HTML
+			id="htmlControl"
+			htmlLoaderFactory="{new ClassFactory(FlexHTMLLoaderExt)}"
+			htmlDOMInitialize="htmlControl_htmlDOMInitializeHandler(event)"
+			complete="htmlControl_completeHandler(event)"
+			width="100%" height="100%" />
+		
+	</s:VGroup>
+	
+</s:ItemRenderer>

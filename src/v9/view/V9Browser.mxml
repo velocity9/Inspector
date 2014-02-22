@@ -1,0 +1,66 @@
+<?xml version="1.0" encoding="utf-8"?>
+<s:VGroup
+	xmlns:fx="http://ns.adobe.com/mxml/2009" 
+	xmlns:s="library://ns.adobe.com/flex/spark" 
+	xmlns:mx="library://ns.adobe.com/flex/mx"
+	xmlns:controls="ws.tink.spark.controls.*"
+	xmlns:browser="v9.view.browser.*"
+	paddingLeft="14" paddingRight="14" paddingTop="14" paddingBottom="0"
+	gap="14">
+
+	<fx:Metadata>
+		[Event(name="addTab", type="v9.view.events.BrowserTabEvent")]
+	</fx:Metadata>
+	
+	<fx:Script>
+		<![CDATA[
+			import v9.view.events.BrowserTabEvent;
+			
+			import mx.collections.IList;
+			
+			import spark.events.IndexChangeEvent;
+			
+			public function set dataProvider(value:IList):void {
+				browserTabBar.dataProvider = browserStack.dataProvider = value;
+			}
+			
+			protected function browserTabBar_changeHandler(event:IndexChangeEvent):void {
+				browserStack.selectedIndex = event.newIndex;
+			}
+			
+			protected function browserTabBar_addTabHandler(event:Event):void {
+				dispatchEvent(new BrowserTabEvent(BrowserTabEvent.ADD_TAB));
+			}
+		]]>
+	</fx:Script>
+	
+	<s:VGroup width="100%" height="100%" gap="0">
+		
+		<browser:BrowserTabBar
+			id="browserTabBar"
+			width="100%" height="30"
+			addTab="browserTabBar_addTabHandler(event)"
+			change="browserTabBar_changeHandler(event)"
+			skinClass="v9.view.skins.BrowserTabBarSkin" />
+		
+		<controls:DataNavigator
+			id="browserStack"
+			width="100%" height="100%"
+			skinClass="ws.tink.spark.skins.controls.DataNavigatorSkin">
+			
+			<controls:itemRenderer>
+				<fx:Component>
+					<browser:BrowserTabContent width="100%" height="100%" />
+				</fx:Component>
+			</controls:itemRenderer>
+			
+		</controls:DataNavigator>
+		
+	</s:VGroup>
+	
+	<browser:ScrapeQueue
+		id="scrapeQueue"
+		title="SWF Queue"
+		width="100%" height="200" />
+	
+</s:VGroup>

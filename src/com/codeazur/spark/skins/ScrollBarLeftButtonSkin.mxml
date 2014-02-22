@@ -1,0 +1,68 @@
+<?xml version="1.0" encoding="utf-8"?>
+<s:SparkSkin
+	xmlns:fx="http://ns.adobe.com/mxml/2009"
+	xmlns:s="library://ns.adobe.com/flex/spark"
+	xmlns:fb="http://ns.adobe.com/flashbuilder/2009">
+
+	<fx:Metadata>
+		[HostComponent("spark.components.Button")]
+	</fx:Metadata> 
+    
+	<fx:Script fb:purpose="styling">
+		<![CDATA[
+			// Define the skin elements that should not be colorized. 
+			// For scroll bar buttons, the graphics are colorized but the arrow is not.
+			static private const exclusions:Array = ["arrow"];
+			
+			// Define the symbol fill items that should be colored by the "symbolColor" style.
+			static private const symbols:Array = [];
+			
+			override public function get colorizeExclusions():Array {
+				return exclusions;
+			}
+			
+			override public function get symbolItems():Array {
+				return symbols;
+			};
+			
+			override protected function initializationComplete():void {
+				useChromeColor = true;
+				super.initializationComplete();
+			}
+		]]>
+	</fx:Script>
+    
+	<s:states>
+		<s:State name="up" />
+		<s:State name="over" />
+		<s:State name="down" />
+		<s:State name="disabled" />
+	</s:states>
+
+    <!-- border/background -->
+	<s:Rect left="0" right="0" top="0" bottom="0" minWidth="15" minHeight="16">
+		<s:fill>
+			<s:SolidColor color="#C0C0C0" />
+		</s:fill>
+	</s:Rect>
+    <s:Rect left="0" right="1" top="1" bottom="0" minWidth="15" minHeight="15">
+        <s:fill>
+            <s:SolidColor
+				color="#FFFFFF"
+				color.over="#F0F0F0" 
+				color.down="#E8E8E8" />
+        </s:fill>
+    </s:Rect>
+
+	<!-- arrow -->
+	<!--- Defines the appearance of the up arrow in the ScrollBar component. -->
+	<s:Path id="arrow" rotation="-90" horizontalCenter="-1.5" verticalCenter="0" data="M 4.0 0.0 L 7.0 6.0 L 0.0 6.0 L 4.0 0.0">
+		<s:fill>
+			<s:SolidColor
+				color="#666666"
+				color.over="#333333"
+				color.down="#333333" />
+		</s:fill>
+	</s:Path>
+	
+</s:SparkSkin>

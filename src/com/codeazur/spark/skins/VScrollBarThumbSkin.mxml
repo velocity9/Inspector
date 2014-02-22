@@ -1,0 +1,42 @@
+<?xml version="1.0" encoding="utf-8"?>
+<s:SparkSkin
+	xmlns:fx="http://ns.adobe.com/mxml/2009"
+	xmlns:s="library://ns.adobe.com/flex/spark"
+    xmlns:fb="http://ns.adobe.com/flashbuilder/2009">
+
+	<fx:Metadata>
+		[HostComponent("spark.components.Button")]
+	</fx:Metadata> 
+
+	<fx:Script fb:purpose="styling">
+		<![CDATA[
+			override protected function initializationComplete():void {
+				useChromeColor = true;
+				super.initializationComplete();
+			}
+		]]>
+	</fx:Script>
+    
+	<s:states>
+		<s:State name="up" />
+		<s:State name="over" />
+		<s:State name="down" />
+		<s:State name="disabled" />
+	</s:states>
+
+	<!-- background -->
+	<s:Rect left="0" right="0" top="0" bottom="0" minWidth="16" minHeight="18">
+		<s:fill>
+			<s:SolidColor color="#C0C0C0" />
+		</s:fill>
+	</s:Rect>
+	<s:Rect left="1" right="0" top="1" bottom="1">
+		<s:fill>
+			<s:SolidColor
+				color="#FFFFFF"
+				color.over="#F0F0F0" 
+				color.down="#E8E8E8" />
+		</s:fill>
+	</s:Rect>
+	
+</s:SparkSkin>

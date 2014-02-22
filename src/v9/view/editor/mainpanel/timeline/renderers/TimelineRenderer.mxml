@@ -1,0 +1,164 @@
+<?xml version="1.0" encoding="utf-8"?>
+<s:ItemRenderer
+	xmlns:fx="http://ns.adobe.com/mxml/2009" 
+	xmlns:s="library://ns.adobe.com/flex/spark" 
+	xmlns:mx="library://ns.adobe.com/flex/mx" 
+	autoDrawBackground="false">
+	
+	<fx:Script>
+		<![CDATA[
+			import com.codeazur.as3swf.timeline.Layer;
+			import com.codeazur.as3swf.timeline.LayerStrip;
+
+			import mx.core.BitmapAsset;
+			
+			protected var _first:uint = uint.MAX_VALUE;
+			protected var _length:uint = uint.MAX_VALUE;
+			
+			protected static var matrix:Matrix = new Matrix(1, 0, 0, 1);
+			
+			[Embed(source="assets/timeline_keyframe.png")]
+			protected static var KeyframeBitmap:Class;
+			protected static var keyFrameBitmap:BitmapAsset = new KeyframeBitmap();
+			
+			[Embed(source="assets/timeline_empty_keyframe.png")]
+			protected static var EmptyKeyframeBitmap:Class;
+			protected static var emptyKeyFrameBitmap:BitmapAsset = new EmptyKeyframeBitmap();
+			
+			[Embed(source="assets/timeline_resizehandle.png")]
+			protected static var ResizeHandleBitmap:Class;
+			protected static var resizeHandleBitmap:BitmapAsset = new ResizeHandleBitmap();
+			
+			[Embed(source="assets/timeline_arrow_nock.png")]
+			protected static var ArrowNockBitmap:Class;
+			protected static var arrowNockBitmap:BitmapAsset = new ArrowNockBitmap();
+			
+			[Embed(source="assets/timeline_arrow_shaft.png")]
+			protected static var ArrowShaftBitmap:Class;
+			protected static var arrowShaftBitmap:BitmapAsset = new ArrowShaftBitmap();
+			
+			[Embed(source="assets/timeline_arrow_point.png")]
+			protected static var ArrowPointBitmap:Class;
+			protected static var arrowPointBitmap:BitmapAsset = new ArrowPointBitmap();
+			
+			[Bindable]
+			protected var layer:Layer;
+			
+			override public function set data(value:Object):void {
+				if(data != value) {
+					super.data = value;
+					layer = value as Layer;
+					// reset renderer when new data is assigned
+					_first = uint.MAX_VALUE;
+					_length = uint.MAX_VALUE;
+				}
+			}
+			
+			override protected function measure():void {
+				super.measure();
+				measureInternal();
+			}
+			
+			protected function measureInternal():void {
+				measuredHeight = 18;
+				measuredWidth = 8 * layer.frameCount;
+			}
+			
+			public function setVisibleFrames(first:uint, length:uint):void {
+				if(_first != first || _length != length) {
+					_first = first;
+					_length = length;
+					frames.graphics.clear();
+					var strips:Array = layer.getStripsForFrameRegion(first, first + length - 1);
+					for(var i:uint = 0; i < strips.length; i++) {
+						drawStrip(strips[i] as LayerStrip);
+					}
+				}
+			}
+			
+			protected function drawStrip(strip:LayerStrip):void {
+				var start:uint = Math.max(strip.startFrameIndex, _first);
+				var end:uint = Math.min(strip.endFrameIndex, _first + _length - 1);
+				var hasFirst:Boolean = (strip.startFrameIndex == start);
+				var hasLast:Boolean = (strip.endFrameIndex == end) && (start != end);
+				var fillColor:uint = 0;
+				var fillAlpha:Number = 1.0;
+				switch(strip.type) {
+					case LayerStrip.TYPE_STATIC:
+						fillColor = 0xdddddd;
+						break;
+					case LayerStrip.TYPE_MOTIONTWEEN:
+						fillColor = 0xafd7ff;
+						break;
+					case LayerStrip.TYPE_SHAPETWEEN:
+						fillColor = 0xccffcc;
+						break;
+					case LayerStrip.TYPE_SPACER:
+						fillColor = 0xffffff;
+						fillAlpha = 0.75;
+						break;
+					default:
+						return;
+				}
+				var x:uint = (start - _first) << 3;
+				var w:uint = (end - start + 1) << 3;
+				// Border
+				frames.graphics.beginFill(0);
+				frames.graphics.drawRect(x - 1, -1, w + 1, 19);
+				if(fillAlpha != 1.0) {
+					frames.graphics.drawRect(x, 0, w - 1, 17);
+				}
+				frames.graphics.endFill();
+				// Fill
+				frames.graphics.beginFill(fillColor, fillAlpha);
+				frames.graphics.drawRect(x, 0, w - 1, 17);
+				frames.graphics.endFill();
+				// Keyframe
+				if(hasFirst) {
+					matrix.tx = x;
+					if(strip.type == LayerStrip.TYPE_SPACER) {
+						frames.graphics.beginBitmapFill(emptyKeyFrameBitmap.bitmapData, matrix);
+					} else {
+						frames.graphics.beginBitmapFill(keyFrameBitmap.bitmapData, matrix);
+					}
+					frames.graphics.drawRect(x, 0, 7, 17);
+					frames.graphics.endFill();
+				}
+				// Resize Handles
+				if(hasLast) {
+					matrix.tx = x + w - 8;
+					if(strip.type == LayerStrip.TYPE_STATIC || strip.type == LayerStrip.TYPE_SPACER) {
+						frames.graphics.beginBitmapFill(resizeHandleBitmap.bitmapData, matrix);
+						frames.graphics.drawRect(x + w - 8, 0, 7, 17);
+						frames.graphics.endFill();
+					} else if(strip.type == LayerStrip.TYPE_MOTIONTWEEN || strip.type == LayerStrip.TYPE_SHAPETWEEN) {
+						frames.graphics.beginBitmapFill(arrowPointBitmap.bitmapData, matrix);
+						frames.graphics.drawRect(x + w - 8, 0, 7, 17);
+						frames.graphics.endFill();
+					}
+				}
+				var mx:uint = x;
+				var mw:uint = w;
+				if(hasFirst) { mx += 8; mw -= 8; }
+				if(hasLast) { mw -= 8; }
+				if(mw > 0) {
+					if(strip.type == LayerStrip.TYPE_MOTIONTWEEN || strip.type == LayerStrip.TYPE_SHAPETWEEN) {
+						matrix.tx = mx;
+						frames.graphics.beginBitmapFill(arrowShaftBitmap.bitmapData, matrix);
+						frames.graphics.drawRect(mx, 0, mw, 17);
+						frames.graphics.endFill();
+					}
+				}
+			}
+		]]>
+	</fx:Script>
+	
+	<s:Rect left="0" right="0" top="0" bottom="0">
+		<s:fill>
+			<s:BitmapFill source="@Embed('assets/timeline_background.png')" fillMode="repeat" />
+		</s:fill>
+	</s:Rect>
+	
+	<s:Group id="frames" left="0" right="0" top="0" bottom="0" />
+	
+</s:ItemRenderer>

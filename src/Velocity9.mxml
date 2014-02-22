@@ -1,0 +1,31 @@
+<?xml version="1.0" encoding="utf-8"?>
+<s:WindowedApplication
+	xmlns:fx="http://ns.adobe.com/mxml/2009" 
+	xmlns:s="library://ns.adobe.com/flex/spark" 
+	xmlns:mx="library://ns.adobe.com/flex/mx"
+	xmlns:v9="v9.*"
+	xmlns:view="v9.view.*"
+	xmlns:components="v9.view.components.*"
+	backgroundColor="#666666"
+	showStatusBar="false">
+	
+	<fx:Declarations>
+		<v9:Velocity9Context contextView="{this}" />
+	</fx:Declarations>
+	
+	<fx:Style source="assets/global.css" />
+
+	<fx:Style>
+		.accHeader {
+			skin: ClassReference("v9.view.skins.AccordeonHeaderSkin");
+			fontFamily: helveticaHalo;
+			fontWeight: bold;
+			fontSize: 13;
+			color: #333333;
+			paddingLeft: 7;
+		}
+	</fx:Style>
+
+	<view:V9Main width="100%" height="100%" />
+
+</s:WindowedApplication>

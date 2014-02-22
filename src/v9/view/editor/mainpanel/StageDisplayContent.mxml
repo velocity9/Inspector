@@ -1,0 +1,77 @@
+<?xml version="1.0" encoding="utf-8"?>
+<s:Group
+	xmlns:fx="http://ns.adobe.com/mxml/2009"
+	xmlns:s="library://ns.adobe.com/flex/spark"
+	xmlns:mx="library://ns.adobe.com/flex/mx">
+
+	<fx:Script>
+		<![CDATA[
+			protected var content:Sprite;
+			
+			protected var contentBounds:Rectangle;
+
+			protected var doUpdate:Boolean = false;
+
+			public function setContent(sprite:Sprite):void {
+				if(content && container.contains(content)) {
+					container.removeChild(content);
+				}
+				contentBounds = sprite.getBounds(sprite);
+				container.addChild(sprite);
+				content = sprite;
+				invalidateSize();
+				invalidateDisplayList();
+				validateNow();
+			}
+			
+			protected override function measure():void
+			{
+				super.measure();
+				if(content) {
+					measuredWidth = contentBounds.width + 40;
+					measuredHeight = contentBounds.height + 40;
+					doUpdate = true;
+				}
+			}
+			
+			protected override function updateDisplayList(unscaledWidth:Number, unscaledHeight:Number):void
+			{
+				super.updateDisplayList(unscaledWidth, unscaledHeight);
+				if(content && doUpdate) {
+					doUpdate = false;
+					content.x = -contentBounds.x + 20;
+					content.y = -contentBounds.y + 20;
+					if(unscaledWidth >= contentBounds.width + 40) {
+						content.x += Math.round((unscaledWidth - (contentBounds.width + 40)) / 2);
+					} else {
+						horizontalScrollPosition = Math.round(((contentBounds.width + 40) - unscaledWidth) / 2);
+					}
+					if(unscaledHeight >= contentBounds.height + 40) {
+						content.y += Math.round((unscaledHeight - (contentBounds.height + 40)) / 2);
+					} else {
+						verticalScrollPosition = Math.round(((contentBounds.height + 40) - unscaledHeight) / 2);
+					}
+				}
+			}
+			
+			public override function get contentWidth():Number {
+				if(content) {
+					return contentBounds.width + 40;
+				} else {
+					return super.contentWidth;
+				}
+			}
+			
+			public override function get contentHeight():Number {
+				if(content) {
+					return contentBounds.height + 40;
+				} else {
+					return super.contentHeight;
+				}
+			}
+		]]>
+	</fx:Script>
+
+	<mx:UIComponent id="container" />
+
+</s:Group>

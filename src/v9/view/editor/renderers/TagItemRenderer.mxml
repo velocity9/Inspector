@@ -1,0 +1,139 @@
+<?xml version="1.0" encoding="utf-8"?>
+<s:ItemRenderer
+	xmlns:fx="http://ns.adobe.com/mxml/2009" 
+	xmlns:s="library://ns.adobe.com/flex/spark" 
+	xmlns:mx="library://ns.adobe.com/flex/mx"
+	doubleClick="doubleClickHandler(event)"
+	doubleClickEnabled="true"
+	autoDrawBackground="false"
+	width="100%">
+
+	<s:states>
+		<s:State name="normal" />
+		<s:State name="hovered" />
+		<s:State name="selected" />
+	</s:states>
+	
+	<fx:Script>
+		<![CDATA[
+			import com.codeazur.as3swf.tags.TagShowFrame;
+			import flash.events.Event;
+			import flash.events.MouseEvent;
+			import v9.events.ExpandableListItemEvent;
+			import v9.model.swf.vo.SWFTagVO;
+
+			
+			[Bindable]
+			protected var tagVO:SWFTagVO;
+			
+			[Bindable]
+			protected var tagNameColor:uint = 0;
+			
+			[Bindable]
+			protected var infoColor:uint = 0;
+			
+			[Bindable]
+			protected var infoText:String = "";
+			
+			[Bindable]
+			protected var infoShow:Boolean = false;
+			
+			public override function set data(value:Object):void {
+				tagVO = value as SWFTagVO;
+				infoShow = false;
+				tagNameColor = 0x222222;
+				if(tagVO) {
+					if(tagVO.characterId > 0) {
+						infoText = tagVO.characterId.toString();
+						infoColor = 0x333333;
+						infoShow = true;
+					} else if(tagVO.tag && tagVO.tag.type == TagShowFrame.TYPE) {
+						infoText = tagVO.frame.toString();
+						infoColor = 0x3333FF;
+						tagNameColor = 0x0000FF;
+						infoShow = true;
+					}
+				}
+			}
+
+			protected function doubleClickHandler(event:MouseEvent):void {
+				tagVO.expanded = !tagVO.expanded;
+				dispatchEvent(new ExpandableListItemEvent(ExpandableListItemEvent.EXPANDABLE_LIST_ITEM_TOGGLE, tagVO, true));
+			}
+			
+			protected function toggleButton_changeHandler(event:Event):void {
+				tagVO.expanded = toggleButton.selected;
+				dispatchEvent(new ExpandableListItemEvent(ExpandableListItemEvent.EXPANDABLE_LIST_ITEM_TOGGLE, tagVO, true));
+			}
+
+			protected function toggleButton_mouseDownHandler(event:MouseEvent):void {
+				event.stopImmediatePropagation();
+			}
+
+		]]>
+	</fx:Script>
+	
+	<s:Rect left="0" top="0" right="0" bottom="0">
+		<s:fill>
+			<s:SolidColor
+				color="#FFFFFF"
+				color.hovered="#E8E8FF" 
+				color.selected="#D8D8FF" />
+		</s:fill>
+	</s:Rect>
+	<s:Rect left="0" bottom="0" right="0" height="1">
+		<s:fill>
+			<s:SolidColor
+				alpha="1"
+				color="#DDDDDD"
+				color.hovered="#DDDDEE"
+				color.selected="#D4D4EE" />
+		</s:fill>
+	</s:Rect>
+	
+	<s:HGroup
+		width="100%"
+		height="25"
+		paddingLeft="2"
+		paddingRight="8"
+		left="{tagVO.parent ? 20 : 0}"
+		verticalAlign="middle">
+		
+		<s:ToggleButton
+			id="toggleButton"
+			width="15" height="15"
+			skinClass="v9.view.skins.CollapseButtonSkin"
+			selected="{tagVO.expanded}"
+			visible="{tagVO.children.length > 0}"
+			mouseDown="toggleButton_mouseDownHandler(event)"
+			change="toggleButton_changeHandler(event)" />
+		
+		<s:Label
+			maxDisplayedLines="1"
+			showTruncationTip="false"
+			text="{tagVO.index}"
+			color="#999999"
+			paddingTop="3"
+			fontSize="12" />
+		
+		<s:Label
+			width="100%"
+			maxDisplayedLines="1"
+			showTruncationTip="false"
+			text="{tagVO.name}"
+			color="{tagNameColor}"
+			paddingTop="3"
+			fontSize="12" />
+		
+		<s:Label
+			maxDisplayedLines="1"
+			text="{infoText}"
+			visible="{infoShow}"
+			includeInLayout="{infoShow}"
+			color="{infoColor}"
+			paddingTop="3"
+			fontSize="12" />
+		
+	</s:HGroup>
+	
+</s:ItemRenderer>

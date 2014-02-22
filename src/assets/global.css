@@ -1,0 +1,87 @@
+/* CSS file */
+@namespace s "library://ns.adobe.com/flex/spark";
+@namespace mx "library://ns.adobe.com/flex/mx";
+@namespace view "v9.view.*";
+@namespace components "v9.view.components.*";
+
+global {
+	modal-transparency: 0.5;
+	modal-transparency-color: black;
+	modal-transparency-blur: 0;
+	font-family: helvetica;
+}
+
+@font-face {
+	src: url("assets/HelveticaNeue.ttc");
+	fontFamily: helvetica;
+	fontStyle: normal;
+	fontWeight: bold;
+	advancedAntiAliasing: true;
+	embedAsCFF: true;
+	unicodeRange:
+		U+0041-005A, /* Upper-Case [A..Z] */
+		U+0061-007A, /* Lower-Case [a..z] */
+		U+0030-0039, /* Numbers [0..9] */
+		U+002E-002E; /* Period [.] */
+}
+
+@font-face {
+	src: url("assets/HelveticaNeue.ttc");
+	fontFamily: helveticaHalo;
+	fontStyle: normal;
+	fontWeight: bold;
+	advancedAntiAliasing: true;
+	embedAsCFF: false;
+	unicodeRange:
+		U+0041-005A, /* Upper-Case [A..Z] */
+		U+0061-007A, /* Lower-Case [a..z] */
+		U+0030-0039, /* Numbers [0..9] */
+		U+002E-002E; /* Period [.] */
+}
+
+.headline {
+	font-family: helvetica;
+	font-size: 28;
+	font-weight: bold;
+	color: #444444;
+}
+
+.subheadline {
+	font-family: "_typewriter";
+	font-size: 12;
+	color: #333333;
+}
+
+.footer {
+	font-family: "_sans";
+	font-size: 11;
+	color: #AAAAAA;
+}
+
+s|Group {
+	font-family: helvetica;
+}
+mx|UIComponent {
+	font-family: helveticaHalo;
+}
+
+components|Header s|Button {
+	font-family: helvetica;
+	font-size: 22;
+	font-weight: bold;
+	color: #666666;
+}
+
+s|Panel #titleDisplay, s|TitleWindow #titleDisplay {
+	font-family: helvetica;
+	font-size: 14;
+	font-weight: bold;
+	color: #222222;
+}
+
+.progressbar-text {
+	font-family: helvetica;
+	font-size: 13;
+	font-weight: bold;
+	color: #666666;
+}

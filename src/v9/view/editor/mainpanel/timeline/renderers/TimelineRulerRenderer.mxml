@@ -1,0 +1,77 @@
+<?xml version="1.0" encoding="utf-8"?>
+<renderers:TimelineRenderer
+	xmlns:fx="http://ns.adobe.com/mxml/2009" 
+	xmlns:s="library://ns.adobe.com/flex/spark" 
+	xmlns:mx="library://ns.adobe.com/flex/mx"
+	xmlns:timeline="v9.view.editor.mainpanel.timeline.*"
+	xmlns:renderers="v9.view.editor.mainpanel.timeline.renderers.*"
+	creationComplete="creationCompleteHandler(event)"
+	preinitialize="preinitializeHandler(event)">
+
+	<fx:Script>
+		<![CDATA[
+			import mx.events.FlexEvent;
+
+			protected var labelReservoir:Vector.<TextField>;
+			
+			override protected function measureInternal():void {
+				measuredHeight = 26;
+				measuredWidth = 2000; //8 * layer.frameCount;
+			}
+			
+			override public function setVisibleFrames(first:uint, length:uint):void {
+				if(_first != first || _length != length) {
+					_first = first;
+					_length = length;
+					var i:uint;
+					var label:TextField;
+					var frameLabelsRequested:uint = Math.ceil(Number(length) / 5);
+					var frameLabelsAvailable:uint = labelReservoir.length;
+					if(frameLabelsRequested > frameLabelsAvailable) {
+						for(i = 0; i < frameLabelsRequested - frameLabelsAvailable; i++) {
+							label = new TextField();
+							label.y = 4;
+							label.visible = false;
+							label.selectable = false;
+							label.defaultTextFormat = new TextFormat("_sans", 11, 0x666666);
+							label.antiAliasType = AntiAliasType.ADVANCED;
+							label.autoSize = TextFieldAutoSize.LEFT;
+							labels.addChild(label);
+							labelReservoir.push(label);
+						}
+					}
+					var frameNr:uint = first;
+					frameLabelsAvailable = labelReservoir.length;
+					for(i = 0; i < frameLabelsAvailable; i++) {
+						label = labelReservoir[i];
+						if(i < frameLabelsRequested) {
+							label.visible = true;
+							label.x = (frameNr == 0) ? -1 : (frameNr - first - 1) * 8 - 2;
+							label.text = (frameNr == 0) ? "1" : frameNr.toString();
+						} else {
+							label.visible = false;
+						}
+						frameNr += 5;
+					}
+				}
+			}
+
+			protected function creationCompleteHandler(event:FlexEvent):void {
+			}
+			
+			protected function preinitializeHandler(event:FlexEvent):void {
+				labelReservoir = new Vector.<TextField>();
+			}
+			
+		]]>
+	</fx:Script>
+
+	<s:Rect left="0" right="0" bottom="1" height="5">
+		<s:fill>
+			<s:BitmapFill source="@Embed('assets/timeline_background_ruler.png')" fillMode="repeat" />
+		</s:fill>
+	</s:Rect>
+	
+	<mx:UIComponent id="labels" />
+	
+</renderers:TimelineRenderer>

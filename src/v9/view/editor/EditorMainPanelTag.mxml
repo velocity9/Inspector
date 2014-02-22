@@ -1,0 +1,163 @@
+<?xml version="1.0" encoding="utf-8"?>
+<s:Group
+	xmlns:fx="http://ns.adobe.com/mxml/2009"
+	xmlns:s="library://ns.adobe.com/flex/spark" 
+	xmlns:mx="library://ns.adobe.com/flex/mx"
+	xmlns:mainpanel="v9.view.editor.mainpanel.*">
+
+	<fx:Script>
+		<![CDATA[
+			import com.codeazur.as3swf.tags.ITag;
+			import com.codeazur.as3swf.tags.TagEnd;
+			
+			import mx.collections.ArrayList;
+			
+			import v9.model.swf.vo.SWFTagVO;
+			
+			[Bindable]
+			public var hasParentTag:Boolean = false;
+			[Bindable]
+			public var parentTagName:String = "";
+			[Bindable]
+			public var tagName:String = "";
+			[Bindable]
+			public var tagInfo:String = "";
+			
+			[Bindable]
+			protected var dp:ArrayList = new ArrayList();
+			
+			protected var _tagVO:SWFTagVO;
+			
+			public function get tagVO():SWFTagVO {
+				return _tagVO;
+			}
+			public function set tagVO(value:SWFTagVO):void {
+				_tagVO = value;
+				var tag:ITag = value.tag;
+				if(tag) {
+					dp = new ArrayList(tag.toString().split("\n"));
+					tagName = value.name;
+					hasParentTag = (value.parent != null); 
+					if(hasParentTag) {
+						parentTagName = value.parent.name;
+					}
+					var info:String = "Size: " + value.tagHeader.headerLength + " + " + value.tagHeader.contentLength + " bytes";
+					if(!(tag is TagEnd)) {
+						info += ", Frame: " + value.frame;
+					}
+					tagInfo = info;
+				} else {
+					dp = new ArrayList();
+				}
+				list.invalidateSize();
+			}
+		]]>
+	</fx:Script>
+    
+	<s:RectangularDropShadow
+		left="0" top="0" right="0" bottom="0"
+		blurX="4" blurY="4" alpha="0.3" distance="4" angle="45" color="#000000"/>
+    
+    <s:Group left="0" right="0" top="0" bottom="0">
+        
+		<!-- background fill -->
+		<s:Rect left="0" right="0" top="32" bottom="32">
+			<s:fill>
+				<s:BitmapFill fillMode="repeat" source="@Embed('assets/transparency_background_light.png')" />
+			</s:fill>
+		</s:Rect>
+        
+		<!-- title bar fill -->
+		<s:Rect left="0" right="0" top="0" height="31">
+			<s:fill>
+				<s:SolidColor color="#F0F0F0" />
+			</s:fill>
+		</s:Rect>
+		
+		<!-- title bar divider -->
+		<s:Rect left="0" right="0" top="31" height="1">
+			<s:fill>
+				<s:SolidColor color="#C0C0C0" />
+			</s:fill>
+		</s:Rect>
+		
+		<!-- control bar divider line -->
+		<s:Rect left="0" right="0" bottom="31" height="1">
+			<s:fill>
+				<s:SolidColor color="0xC0C0C0" />
+			</s:fill>
+		</s:Rect>
+		
+		<!-- control bar fill -->
+		<s:Rect left="0" right="0" bottom="0" height="31">
+			<s:fill>
+				<s:SolidColor color="#F0F0F0" />
+			</s:fill>
+		</s:Rect>
+		
+        <!-- contents -->
+        <s:VGroup left="0" right="0" top="0" bottom="0" gap="0">
+			
+            <s:HGroup height="32" width="100%" gap="0">
+
+				<s:Button
+					height="31"
+					id="parentTagButton"
+					styleName="panelBarText"
+					enabled="true"
+					label="{parentTagName}"
+					visible="{hasParentTag}"
+					includeInLayout="{hasParentTag}"
+					skinClass="v9.view.skins.ParentTagHeaderButtonSkin" />
+				
+				<s:Label
+					id="tagNameLabel"
+					text="{tagName}"
+					styleName="panelBarTitleText"
+					maxDisplayedLines="1"
+					height="31"
+					paddingLeft="10" paddingRight="10"
+					verticalAlign="middle"/>
+				
+				<s:Label
+					id="tagInfoContent"
+					text="{tagInfo}"
+					styleName="panelBarText"
+					color="#888888"
+					maxDisplayedLines="1"
+					width="100%"
+					height="31"
+					textAlign="right"
+					paddingLeft="10" paddingRight="10"
+					verticalAlign="middle"/>
+				
+            </s:HGroup>
+
+			<s:List
+				id="list"
+				width="100%"
+				height="100%"
+				borderVisible="false"
+				dataProvider="{dp}"
+				skinClass="v9.view.skins.MainTextListSkin"
+				itemRenderer="v9.view.editor.renderers.TagDumpItemRenderer" />
+			
+			<s:HGroup id="controlBar" height="32" width="100%" gap="0">
+
+				<mx:Spacer width="100%" />
+				
+				<s:Button
+					skinClass="v9.view.skins.HeaderButtonSkin"
+					height="100%"
+					id="clipboardButton"
+					styleName="panelBarText"
+					enabled="true"
+					label="Copy To Clipboard" />
+
+			</s:HGroup>
+			
+        </s:VGroup>
+		
+    </s:Group>
+	
+</s:Group>

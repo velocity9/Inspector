@@ -1,0 +1,143 @@
+<?xml version="1.0" encoding="utf-8"?>
+<s:Group
+	xmlns:fx="http://ns.adobe.com/mxml/2009"
+	xmlns:s="library://ns.adobe.com/flex/spark" 
+	xmlns:mx="library://ns.adobe.com/flex/mx" xmlns:mainpanel="v9.view.editor.mainpanel.*"
+	xmlns:timeline="v9.view.editor.mainpanel.timeline.*" xmlns:components="v9.view.components.*">
+
+	<fx:Script>
+		<![CDATA[
+			import v9.view.events.FrameNumberEvent;
+			import com.codeazur.as3swf.SWFTimelineContainer;
+			import com.codeazur.as3swf.timeline.Layer;
+			import com.codeazur.as3swf.timeline.LayerStrip;
+
+			import mx.collections.ArrayCollection;
+			
+			[Bindable]
+			public var frameNumber:uint = 1;
+			[Bindable]
+			public var frameCount:uint = 1;
+			
+			[Bindable]
+			protected var _timeline:SWFTimelineContainer;
+			
+			[Bindable]
+			public var content:Sprite;
+			
+			public function get timeline():SWFTimelineContainer {
+				return _timeline;
+			}
+			public function set timeline(value:SWFTimelineContainer):void {
+				var newLayers:ArrayCollection = new ArrayCollection();
+				for(var i:int = value.layers.length - 1; i >= 0; --i) {
+					newLayers.addItem(value.layers[i]);
+				}
+				if(newLayers.length == 0) {
+					var emptyLayer:Layer = new Layer(0, 1);
+					emptyLayer.appendStrip(LayerStrip.TYPE_SPACER, 0, 0);
+					newLayers.addItem(emptyLayer);
+				}
+				timelineComponent.dataProvider = newLayers;
+				_timeline = value;
+			}
+		]]>
+	</fx:Script>
+    
+	<s:RectangularDropShadow
+		left="0" top="0" right="0" bottom="0"
+		blurX="4" blurY="4" alpha="0.3" distance="4" angle="45" color="#000000"/>
+    
+    <s:Group left="0" right="0" top="0" bottom="0">
+        
+		<!-- background fill -->
+		<s:Rect left="0" right="0" top="32" bottom="32">
+			<s:fill>
+				<s:BitmapFill fillMode="repeat" source="@Embed('assets/transparency_background_light.png')" />
+			</s:fill>
+		</s:Rect>
+        
+		<!-- title bar fill -->
+		<s:Rect left="0" right="0" top="0" height="31">
+			<s:fill>
+				<s:SolidColor color="#F0F0F0" />
+			</s:fill>
+		</s:Rect>
+		
+		<!-- title bar divider -->
+		<s:Rect left="0" right="0" top="31" height="1">
+			<s:fill>
+				<s:SolidColor color="#C0C0C0" />
+			</s:fill>
+		</s:Rect>
+		
+		<!-- control bar divider line -->
+		<s:Rect left="0" right="0" bottom="31" height="1">
+			<s:fill>
+				<s:SolidColor color="0xC0C0C0" />
+			</s:fill>
+		</s:Rect>
+		
+		<!-- control bar fill -->
+		<s:Rect left="0" right="0" bottom="0" height="31">
+			<s:fill>
+				<s:SolidColor color="#F0F0F0" />
+			</s:fill>
+		</s:Rect>
+		
+        <!-- contents -->
+        <s:VGroup left="0" right="0" top="0" bottom="0" gap="0">
+			
+            <s:HGroup height="32" width="100%" gap="0">
+
+				<mx:Spacer width="100%" />
+				
+	            <s:HGroup height="32" gap="0" paddingTop="4" paddingBottom="4" paddingRight="3">
+
+					<components:FrameSelector
+						id="frameSelectorComponent"
+						height="100%"
+						frameNumber="{frameNumber}"
+						frameCount="{frameCount}" />
+				
+				</s:HGroup>
+				
+			</s:HGroup>
+            
+			<timeline:Timeline
+				id="timelineComponent"
+				skinClass="v9.view.editor.mainpanel.timeline.TimelineSkin"
+				borderVisible="false"
+				width="100%"
+				maxHeight="150" />
+
+			<s:Line left="0" right="0">
+				<s:stroke>
+					<s:SolidColorStroke color="0xC0C0C0" />
+				</s:stroke>
+			</s:Line>
+			
+			<mainpanel:StageDisplay
+				content="{content}"
+				height="100%"
+				width="100%" />
+			
+            <s:HGroup id="controlBar" height="32" width="100%" gap="0">
+
+				<mx:Spacer width="100%" />
+				
+				<!--<s:Button
+					height="100%"
+					id="exportButton"
+					styleName="panelBarText"
+					enabled="true"
+					label="Export"
+					skinClass="v9.view.skins.HeaderButtonSkin" />-->
+					
+			</s:HGroup>
+			
+        </s:VGroup>
+		
+    </s:Group>
+	
+</s:Group>

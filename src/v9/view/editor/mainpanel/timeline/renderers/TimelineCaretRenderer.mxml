@@ -1,0 +1,27 @@
+<?xml version="1.0" encoding="utf-8"?>
+<renderers:TimelineRenderer
+	xmlns:fx="http://ns.adobe.com/mxml/2009" 
+	xmlns:s="library://ns.adobe.com/flex/spark" 
+	xmlns:mx="library://ns.adobe.com/flex/mx"
+	xmlns:timeline="v9.view.editor.mainpanel.timeline.*"
+	xmlns:renderers="v9.view.editor.mainpanel.timeline.renderers.*">
+
+	<fx:Script>
+		<![CDATA[
+			override protected function measureInternal():void {
+				measuredHeight = 26;
+				measuredWidth = 2000; //8 * layer.frameCount;
+			}
+			
+			override public function setVisibleFrames(first:uint, length:uint):void {
+				if(_first != first || _length != length) {
+					_first = first;
+					_length = length;
+				}
+			}
+		]]>
+	</fx:Script>
+	
+	<mx:UIComponent />
+
+</renderers:TimelineRenderer>

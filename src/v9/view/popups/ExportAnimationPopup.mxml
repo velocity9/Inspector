@@ -1,0 +1,40 @@
+<?xml version="1.0" encoding="utf-8"?>
+<s:TitleWindow
+	xmlns:fx="http://ns.adobe.com/mxml/2009" 
+	xmlns:s="library://ns.adobe.com/flex/spark" 
+	xmlns:mx="library://ns.adobe.com/flex/mx"
+	skinClass="com.codeazur.spark.skins.TitleWindowSkin"
+	title="Export Animation ..."
+	width="700"
+	height="500">
+	
+	<fx:Script>
+		<![CDATA[
+			import mx.collections.ArrayList;
+			
+			protected var _text:String;
+			
+			[Bindable]
+			protected var dp:ArrayList = new ArrayList();
+			
+			public function get text():String {
+				return _text;
+			}
+			public function set text(value:String):void {
+				_text = value;
+				dp = new ArrayList(value.toString().split("\n"));
+				list.invalidateSize();
+			}
+		]]>
+	</fx:Script>
+	
+	<s:List
+		id="list"
+		width="100%"
+		height="100%"
+		borderVisible="false"
+		dataProvider="{dp}"
+		skinClass="v9.view.skins.MainTextListSkin"
+		itemRenderer="v9.view.editor.renderers.TagDumpItemRenderer" />
+	
+</s:TitleWindow>

@@ -1,0 +1,97 @@
+<?xml version="1.0" encoding="utf-8"?>
+<s:Group
+	xmlns:fx="http://ns.adobe.com/mxml/2009" 
+	xmlns:s="library://ns.adobe.com/flex/spark" 
+	xmlns:mx="library://ns.adobe.com/flex/mx"
+	xmlns:components="v9.view.components.*"
+	xmlns:editor="v9.view.editor.*">
+
+	<fx:Script>
+		<![CDATA[
+			import v9.model.swf.V9SWF;
+			
+			[Bindable]
+			protected var _swf:V9SWF;
+			
+			public function get swf():V9SWF { return _swf; }
+			public function set swf(value:V9SWF):void {
+				_swf = value;
+				version = value.version;
+				w = value.frameSize.rect.width;
+				h = value.frameSize.rect.height;
+				fps = value.frameRate;
+			}
+			
+			[Bindable]
+			public var url:String;
+			
+			[Bindable]
+			protected var version:uint;
+			[Bindable]
+			protected var w:Number;
+			[Bindable]
+			protected var h:Number;
+			[Bindable]
+			protected var fps:Number;
+		]]>
+	</fx:Script>
+	
+	<!-- Sub Header -->
+	<s:Group width="100%" height="26">
+		<s:Rect width="100%" height="100%">
+			<s:fill>
+				<s:SolidColor color="#F0F0F0" />
+			</s:fill>
+		</s:Rect>
+		<s:HGroup width="100%" height="100%" paddingTop="4" paddingLeft="14" paddingRight="14" gap="0">
+			<s:Label
+				styleName="subheadline"
+				width="100%" height="100%"
+				verticalAlign="middle"
+				maxDisplayedLines="1"
+				text="{url}" />
+			<s:Label
+				styleName="subheadline"
+				height="100%"
+				verticalAlign="middle"
+				maxDisplayedLines="1"
+				text="SWF{version}, {fps}fps, {w}x{h}px" />
+		</s:HGroup>
+		<s:RectangularDropShadow
+			width="100%" height="100%"
+			blurX="5" blurY="5" alpha="0.2" distance="2" angle="45"
+			color="#000000"/>
+	</s:Group>
+	
+	<!-- Main Content -->
+	<s:HGroup width="100%" height="100%" top="26" gap="14" paddingLeft="14" paddingRight="14" paddingTop="14" paddingBottom="0">
+
+		<editor:EditorLibrary
+			id="navigation"
+			swf="{_swf}"
+			width="300"
+			height="100%" />
+
+		<mx:ViewStack id="mainPanel" width="100%" height="100%" visible="false">
+
+			<s:NavigatorContent id="animationNavItem">
+				<editor:EditorMainPanelAnimation id="animationPanel" width="100%" height="100%" />
+			</s:NavigatorContent>			
+				
+			<s:NavigatorContent id="shapeNavItem">
+				<editor:EditorMainPanelShape id="shapePanel" width="100%" height="100%" />
+			</s:NavigatorContent>			
+			
+			<s:NavigatorContent id="bitmapNavItem">
+				<editor:EditorMainPanelBitmap id="bitmapPanel" width="100%" height="100%" />
+			</s:NavigatorContent>			
+			
+			<s:NavigatorContent id="tagNavItem">
+				<editor:EditorMainPanelTag id="tagPanel" width="100%" height="100%" />
+			</s:NavigatorContent>			
+			
+		</mx:ViewStack>
+		
+	</s:HGroup>
+
+</s:Group>

@@ -1,0 +1,43 @@
+<?xml version="1.0" encoding="utf-8"?>
+<s:Group
+	xmlns:fx="http://ns.adobe.com/mxml/2009"
+	xmlns:s="library://ns.adobe.com/flex/spark"
+	xmlns:mx="library://ns.adobe.com/flex/mx"
+	xmlns:mainpanel="v9.view.editor.mainpanel.*"
+	xmlns:components="v9.view.components.*">
+
+	<fx:Script>
+		<![CDATA[
+			import flash.display.Sprite;
+			
+			protected var _content:Sprite;
+			
+			public function get content():Sprite {
+				return _content;
+			}
+			public function set content(value:Sprite):void {
+				_content = value;
+				canvas.setContent(value);
+				scroller.viewport = null;
+				scroller.viewport = canvas;
+				validateNow();
+			}
+		]]>
+	</fx:Script>
+
+	<s:Group id="outer" width="100%" height="100%" maskType="clip">
+		<s:mask>
+			<s:Group>
+				<s:Rect width="{outer.width}" height="{outer.height}">
+					<s:fill>
+						<s:SolidColor color="0xff0000" />
+					</s:fill>
+				</s:Rect>
+			</s:Group>
+		</s:mask>
+		<s:Scroller id="scroller" width="100%" height="100%" skinClass="com.codeazur.spark.skins.ScrollerSkin">
+			<mainpanel:StageDisplayContent id="canvas" />
+		</s:Scroller>
+	</s:Group>
+
+</s:Group>

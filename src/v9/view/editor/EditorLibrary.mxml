@@ -1,0 +1,88 @@
+<?xml version="1.0" encoding="utf-8"?>
+<s:Group
+	xmlns:fx="http://ns.adobe.com/mxml/2009"
+	xmlns:s="library://ns.adobe.com/flex/spark"
+	xmlns:mx="library://ns.adobe.com/flex/mx">
+
+	<fx:Script>
+		<![CDATA[
+			import v9.model.swf.V9SWF;
+			import v9.view.editor.etc.AccordionItemFamily;
+			import v9.view.editor.renderers.AccordionItem;
+			import v9.view.editor.renderers.AnimationItemRenderer;
+			import v9.view.editor.renderers.BitmapItemRenderer;
+			import v9.view.editor.renderers.FontItemRenderer;
+			import v9.view.editor.renderers.ShapeItemRenderer;
+			import v9.view.editor.renderers.SimpleItemRenderer;
+			import v9.view.editor.renderers.TagItemRenderer;
+
+			import mx.collections.ArrayCollection;
+			
+			protected var _swf:V9SWF;
+			
+			public function get swf():V9SWF {
+				return _swf;
+			}
+			public function set swf(value:V9SWF):void {
+				_swf = value;
+				removeAllAccordionItems();
+				addAccordionItem(swf.animationCollection, "Animations", AccordionItemFamily.CHARACTER_ITEM, AnimationItemRenderer);
+				addAccordionItem(swf.buttonCollection, "Buttons", AccordionItemFamily.CHARACTER_ITEM, SimpleItemRenderer);
+				addAccordionItem(swf.shapeCollection, "Shapes", AccordionItemFamily.CHARACTER_ITEM, ShapeItemRenderer);
+				addAccordionItem(swf.bitmapCollection, "Bitmaps", AccordionItemFamily.CHARACTER_ITEM, BitmapItemRenderer);
+				addAccordionItem(swf.fontCollection, "Fonts", AccordionItemFamily.CHARACTER_ITEM, FontItemRenderer);
+				addAccordionItem(swf.tagCollection, "Tags", AccordionItemFamily.TAG_ITEM, TagItemRenderer);
+			}
+
+			public function unSelectAllBut(vo:Object):void
+			{
+				for (var i:int = assetList.numElements - 1; i >= 0; i--) {
+					var item:AccordionItem = assetList.getElementAt(i) as AccordionItem;
+					if(item != null && item.list != null) {
+						if(item.list.selectedItem != vo) {
+							item.list.selectedIndex = -1;
+						}
+					}
+				}
+			}
+			
+			private function addAccordionItem(list:ArrayCollection, label:String, itemFamily:String, renderer:Class):void
+			{
+				if(list.length > 0) {
+					var item:AccordionItem = new AccordionItem();
+					item.label = label;
+					item.items = list;
+					item.itemFamily = itemFamily;
+					item.itemRenderer = new ClassFactory(renderer);
+					assetList.addElement(item);
+				}
+			}
+
+			private function removeAllAccordionItems():void
+			{
+				for (var i:int = assetList.numElements - 1; i >= 0; i--) {
+					if(assetList.getElementAt(i) is AccordionItem) {
+						assetList.removeElementAt(i);
+					}
+				}
+			}
+		]]>
+	</fx:Script>
+
+	<s:RectangularDropShadow
+		left="0" top="0" right="0" bottom="0"
+		blurX="4" blurY="4" alpha="0.3" distance="4" angle="45" color="#000000"/>
+
+	<mx:Accordion
+		id="assetList"
+		headerStyleName="accHeader"
+		headerHeight="29"
+		borderSkin="v9.view.skins.AccordionBorderSkin"
+		paddingLeft="1" paddingRight="1" paddingTop="1" paddingBottom="1"
+		fontFamily="helveticaHalo"
+		borderVisible="false"
+		verticalGap="3"
+		width="100%"
+		height="100%" />
+
+</s:Group>

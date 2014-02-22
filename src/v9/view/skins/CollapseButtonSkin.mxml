@@ -1,0 +1,44 @@
+<?xml version="1.0" encoding="utf-8"?>
+<s:SparkSkin
+	xmlns:fx="http://ns.adobe.com/mxml/2009"
+	xmlns:s="library://ns.adobe.com/flex/spark" 
+    xmlns:fb="http://ns.adobe.com/flashbuilder/2009"
+	minWidth="15" minHeight="15"
+	alpha.disabledStates="0.5">
+
+    <fx:Metadata>
+	    <![CDATA[ 
+	        [HostComponent("spark.components.ToggleButton")]
+	    ]]>
+    </fx:Metadata>
+    
+    <s:states>
+        <s:State name="up" />
+        <s:State name="over" stateGroups="overStates" />
+        <s:State name="down" stateGroups="downStates" />
+        <s:State name="disabled" stateGroups="disabledStates" />
+        <s:State name="upAndSelected" stateGroups="selectedStates, selectedUpStates" />
+        <s:State name="overAndSelected" stateGroups="overStates, selectedStates" />
+        <s:State name="downAndSelected" stateGroups="downStates, selectedStates" />
+        <s:State name="disabledAndSelected" stateGroups="selectedUpStates, disabledStates, selectedStates" />
+    </s:states>
+    
+	<s:Path data="M15 0 15 15 0 15 0 0 15 0">
+		<s:fill>
+			<s:SolidColor color="#FFFFFF" alpha="0"/>
+		</s:fill>
+	</s:Path>
+
+	<s:Path visible="true" visible.selectedStates="false" data="M4 2.5 11.4 7.55 4 12.4 4 2.5">
+		<s:fill>
+			<s:SolidColor color="#666666" alpha="1"/>
+		</s:fill>
+	</s:Path>
+	
+	<s:Path visible="false" visible.selectedStates="true" rotation="90" x="15.15" data="M4 12.4 4 2.5 11.4 7.55 4 12.4">
+		<s:fill>
+			<s:SolidColor color="#666666" alpha="1"/>
+		</s:fill>
+	</s:Path>
+	
+</s:SparkSkin>

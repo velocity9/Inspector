@@ -1,0 +1,116 @@
+<?xml version="1.0" encoding="utf-8"?>
+<s:Group
+	xmlns:fx="http://ns.adobe.com/mxml/2009"
+	xmlns:s="library://ns.adobe.com/flex/spark" 
+	xmlns:mx="library://ns.adobe.com/flex/mx"
+	xmlns:mainpanel="v9.view.editor.mainpanel.*">
+
+	<fx:Script>
+		<![CDATA[
+			[Bindable]
+			public var hasParentTag:Boolean = false;
+			[Bindable]
+			public var parentTagName:String = "";
+			[Bindable]
+			public var tagName:String = "";
+			[Bindable]
+			public var frameNumber:uint = 1;
+			
+			[Bindable]
+			public var content:Sprite;
+		]]>
+	</fx:Script>
+    
+	<s:RectangularDropShadow
+		left="0" top="0" right="0" bottom="0"
+		blurX="4" blurY="4" alpha="0.3" distance="4" angle="45" color="#000000"/>
+    
+    <s:Group left="0" right="0" top="0" bottom="0">
+        
+		<!-- background fill -->
+		<s:Rect left="0" right="0" top="32" bottom="32">
+			<s:fill>
+				<s:BitmapFill fillMode="repeat" source="@Embed('assets/transparency_background_light.png')" />
+			</s:fill>
+		</s:Rect>
+        
+		<!-- title bar fill -->
+		<s:Rect left="0" right="0" top="0" height="31">
+			<s:fill>
+				<s:SolidColor color="#F0F0F0" />
+			</s:fill>
+		</s:Rect>
+		
+		<!-- title bar divider -->
+		<s:Rect left="0" right="0" top="31" height="1">
+			<s:fill>
+				<s:SolidColor color="#C0C0C0" />
+			</s:fill>
+		</s:Rect>
+		
+		<!-- control bar divider line -->
+		<s:Rect left="0" right="0" bottom="31" height="1">
+			<s:fill>
+				<s:SolidColor color="0xC0C0C0" />
+			</s:fill>
+		</s:Rect>
+		
+		<!-- control bar fill -->
+		<s:Rect left="0" right="0" bottom="0" height="31">
+			<s:fill>
+				<s:SolidColor color="#F0F0F0" />
+			</s:fill>
+		</s:Rect>
+		
+        <!-- contents -->
+        <s:VGroup left="0" right="0" top="0" bottom="0" gap="0">
+			
+            <s:HGroup height="32" width="100%" gap="0">
+
+				<!--
+				<s:TabBar height="100%">
+					<s:ArrayCollection>
+						<fx:String>Display</fx:String>
+						<fx:String>AS3</fx:String>
+						<fx:String>FXG</fx:String>
+						<fx:String>SVG</fx:String>
+						<fx:String>Obj-C</fx:String>
+						<fx:String>Paper.js</fx:String>
+					</s:ArrayCollection>
+				</s:TabBar>
+				-->
+			
+            </s:HGroup>
+            
+			<mainpanel:StageDisplay
+				content="{content}"
+				height="100%"
+				width="100%" />
+			
+            <s:HGroup id="controlBar" height="32" width="100%" gap="0">
+
+				<mx:Spacer width="100%" />
+				
+				<s:Button
+					skinClass="v9.view.skins.HeaderButtonSkin"
+					height="100%"
+					id="exportJSONButton"
+					styleName="panelBarText"
+					enabled="true"
+					label="Export to JSON" />
+				
+				<s:Button
+					skinClass="v9.view.skins.HeaderButtonSkin"
+					height="100%"
+					id="exportCanvasButton"
+					styleName="panelBarText"
+					enabled="true"
+					label="Export to Canvas" />
+					
+			</s:HGroup>
+			
+        </s:VGroup>
+		
+    </s:Group>
+	
+</s:Group>

@@ -1,0 +1,96 @@
+<?xml version="1.0" encoding="utf-8"?>
+<s:HGroup
+	xmlns:fx="http://ns.adobe.com/mxml/2009"
+	xmlns:s="library://ns.adobe.com/flex/spark"
+	xmlns:mx="library://ns.adobe.com/flex/mx">
+
+	<fx:Metadata>
+		[Event(name="frameNumberChange", type="v9.view.events.FrameNumberEvent")]
+	</fx:Metadata>
+
+	<fx:Script>
+		<![CDATA[
+			import v9.view.events.FrameNumberEvent;
+			
+			private var _frameNumber:int;
+
+			[Bindable]
+			public var frameCount:uint;
+			[Bindable]
+			public var frameRate:uint = 12;
+
+			private function prevFrameButtonClickHandler(event:MouseEvent):void {
+				frameNumber--;
+				dispatchEvent(new FrameNumberEvent(FrameNumberEvent.CHANGE, frameNumber));
+			}
+			private function nextFrameButtonClickHandler(event:MouseEvent):void {
+				frameNumber++;
+				dispatchEvent(new FrameNumberEvent(FrameNumberEvent.CHANGE, frameNumber));
+			}
+
+			private function playButtonClickHandler(event:MouseEvent):void {
+			}
+			
+			[Bindable]
+			public function get frameNumber():int {
+				return _frameNumber;
+			}
+			public function set frameNumber(value:int):void {
+				value -= 1;
+				value %= frameCount;
+				if(value < 0) {
+					value += frameCount;
+				}
+				_frameNumber = value + 1;
+			}
+		]]>
+	</fx:Script>
+
+	<s:Label
+		text="Frame"
+		height="100%"
+		maxDisplayedLines="1"
+		styleName="panelBarText"
+		verticalAlign="middle"
+		verticalCenter="0" />
+
+	<s:TextInput
+		width="70"
+		height="100%"
+		styleName="panelBarText"
+		enabled="{frameCount &gt; 1}"
+		text="{frameNumber}" />
+	
+	<s:Label
+		text=" / {frameCount}"
+		height="100%"
+		maxDisplayedLines="1"
+		styleName="panelBarText"
+		verticalAlign="middle"
+		verticalCenter="0" />
+
+	<s:Button
+		id="nextFrameButton"
+		skinClass="v9.view.skins.PanelBarButtonSkin"
+		height="100%"
+		styleName="panelBarText"
+		label="+"
+		click="nextFrameButtonClickHandler(event)" />
+	
+	<s:Button
+		id="prevFrameButton"
+		skinClass="v9.view.skins.PanelBarButtonSkin"
+		height="100%"
+		styleName="panelBarText"
+		label="-"
+		click="prevFrameButtonClickHandler(event)" />
+
+	<s:Button
+		id="playButton"
+		skinClass="v9.view.skins.PanelBarButtonSkin"
+		height="100%"
+		styleName="panelBarText"
+		label=">"
+		click="playButtonClickHandler(event)" />
+
+</s:HGroup>

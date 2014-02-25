@@ -27,3 +27,12 @@ A picture is worth a thousand words.
 ### Shape Export
 
 ![image](img/img4.png)
+
+## TODO
+
+- Animations: fix stage view (positioning on stage, masking etc., make selecting a frame easier/work)
+- Shape export: fix and add more targets
+- Fonts: display them, add export
+- Bitmaps: add export
+- Tags: display proper bytecode for DoAction, DoABC etc.
+- lots of other, minor stuff

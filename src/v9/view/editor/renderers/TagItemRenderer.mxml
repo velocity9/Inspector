@@ -53,6 +53,7 @@
 						tagNameColor = 0x0000FF;
 						infoShow = true;
 					}
+					toggleButton.visible = (tagVO.children.length > 0);
 				}
 			}
 
@@ -104,7 +105,6 @@
 			width="15" height="15"
 			skinClass="v9.view.skins.CollapseButtonSkin"
 			selected="{tagVO.expanded}"
-			visible="{tagVO.children.length > 0}"
 			mouseDown="toggleButton_mouseDownHandler(event)"
 			change="toggleButton_changeHandler(event)" />
 		

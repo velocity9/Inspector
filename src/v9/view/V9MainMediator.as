@@ -54,6 +54,7 @@ package v9.view
 		}
 		
 		private function swfParseCompleteHandler(event:SWFParseEvent):void {
+			main.showFooter = true;
 			main.mainContentStack.selectedIndex = 1;
 			main.viewEditor.swf = event.swf as V9SWF;
 			main.viewEditor.url = event.url;

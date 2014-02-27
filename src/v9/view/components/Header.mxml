@@ -12,7 +12,7 @@
 		height="100%"
 		verticalAlign="middle"
 		paddingTop="4"
-		text="Velocity 9" />
+		text="Velocity 9 SWF Inspector" />
 
 	<s:ButtonBar />
 	

@@ -5,6 +5,13 @@
 	xmlns:mx="library://ns.adobe.com/flex/mx"
 	xmlns:view="v9.view.*"
 	xmlns:components="v9.view.components.*">
+
+	<fx:Script>
+		<![CDATA[
+			[Bindable]
+			public var showFooter:Boolean = false;
+		]]>
+	</fx:Script>
 	
 	<fx:Declarations>
 		<!-- Place non-visual elements (e.g., services, value objects) here -->
@@ -14,7 +21,7 @@
 	<components:SparkViewStack
 		id="mainContentStack"
 		borderVisible="false"
-		left="0" right="0" top="{header.height}" bottom="{footer.height}"
+		left="0" right="0" top="{header.height}" bottom="{showFooter ? footer.height : 0}"
 		skinClass="v9.view.skins.MainContentStackSkin">
 		
 		<view:V9Startup id="viewStartup" width="100%" height="100%" />
@@ -38,6 +45,6 @@
 	</s:Group>
 	
 	<!-- Footer -->
-	<components:Footer id="footer" width="100%" height="24" bottom="0" />
+	<components:Footer id="footer" visible="{showFooter}" width="100%" height="24" bottom="0" />
 
 </s:Group>

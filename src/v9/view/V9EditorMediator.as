@@ -1,6 +1,9 @@
 package v9.view
 {
+	import org.robotlegs.mvcs.Mediator;
+	
 	import v9.events.SWFParseEvent;
+	import v9.events.SetMainViewEvent;
 	import v9.events.V9EditorViewEvent;
 	import v9.model.SWFModel;
 	import v9.model.V9EditorViewModel;
@@ -8,8 +11,6 @@ package v9.view
 	import v9.model.swf.vo.SWFCharacterVO;
 	import v9.view.events.CharacterItemEvent;
 	import v9.view.events.TagItemEvent;
-
-	import org.robotlegs.mvcs.Mediator;
 	
 	public class V9EditorMediator extends Mediator
 	{
@@ -31,7 +32,6 @@ package v9.view
 		{
 			eventMap.mapListener(view, CharacterItemEvent.CHANGE, characterItemSelectionChangeHandler);
 			eventMap.mapListener(view, TagItemEvent.CHANGE, tagItemSelectionChangeHandler);
-			eventMap.mapListener(eventDispatcher, SWFParseEvent.COMPLETE, swfParseCompleteHandler);
 			eventMap.mapListener(eventDispatcher, V9EditorViewEvent.ITEM_CHANGED, itemChangedHandler);
 		}
 		
@@ -39,7 +39,6 @@ package v9.view
 		{
 			eventMap.unmapListener(view, CharacterItemEvent.CHANGE, characterItemSelectionChangeHandler);
 			eventMap.unmapListener(view, TagItemEvent.CHANGE, tagItemSelectionChangeHandler);
-			eventMap.unmapListener(eventDispatcher, SWFParseEvent.COMPLETE, swfParseCompleteHandler);
 			eventMap.unmapListener(eventDispatcher, V9EditorViewEvent.ITEM_CHANGED, itemChangedHandler);
 		}
 
@@ -89,14 +88,6 @@ package v9.view
 		private function tagItemSelectionChangeHandler(event:TagItemEvent):void
 		{
 			dispatch(new V9EditorViewEvent(V9EditorViewEvent.ITEM_CHANGE, event.item));
-		}
-		
-		protected function swfParseCompleteHandler(event:SWFParseEvent):void
-		{
-			view.swf = event.swf as V9SWF;
-			view.url = event.url;
-			view.visible = true;
-			view.mainPanel.visible = false;
 		}
 	}
 }

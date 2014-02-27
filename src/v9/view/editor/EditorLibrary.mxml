@@ -79,7 +79,7 @@
 		headerHeight="29"
 		borderSkin="v9.view.skins.AccordionBorderSkin"
 		paddingLeft="1" paddingRight="1" paddingTop="1" paddingBottom="1"
-		fontFamily="helveticaHalo"
+		fontFamily="_sans"
 		borderVisible="false"
 		verticalGap="3"
 		width="100%"

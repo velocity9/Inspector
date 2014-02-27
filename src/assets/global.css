@@ -8,7 +8,7 @@ global {
 	modal-transparency: 0.5;
 	modal-transparency-color: black;
 	modal-transparency-blur: 0;
-	font-family: helvetica;
+	font-family: "_sans";
 }
 
 @font-face {
@@ -59,10 +59,10 @@ global {
 }
 
 s|Group {
-	font-family: helvetica;
+	font-family: "_sans";
 }
 mx|UIComponent {
-	font-family: helveticaHalo;
+	font-family: "_sans";
 }
 
 components|Header s|Button {
@@ -73,10 +73,13 @@ components|Header s|Button {
 }
 
 s|Panel #titleDisplay, s|TitleWindow #titleDisplay {
+	font-family: "_sans";
+	/*
 	font-family: helvetica;
 	font-size: 14;
 	font-weight: normal;
 	color: #222222;
+	*/
 }
 
 .progressbar-text {

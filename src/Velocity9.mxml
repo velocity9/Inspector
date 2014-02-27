@@ -18,10 +18,10 @@
 	<fx:Style>
 		.accHeader {
 			skin: ClassReference("v9.view.skins.AccordeonHeaderSkin");
-			fontFamily: helveticaHalo;
-			fontWeight: bold;
+			fontFamily: "_sans";
+			fontWeight: normal;
 			fontSize: 13;
-			color: #333333;
+			color: #222222;
 			paddingLeft: 7;
 		}
 	</fx:Style>

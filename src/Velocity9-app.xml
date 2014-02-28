@@ -70,19 +70,19 @@
 		<!-- <resizable></resizable> -->
 
 		<!-- The window's initial width in pixels. Optional. -->
-		<width>1000</width>
+		<width>1200</width>
 
 		<!-- The window's initial height in pixels. Optional. -->
-		<height>700</height>
+		<height>800</height>
 
 		<!-- The window's initial x position. Optional. -->
-		<x>40</x>
+		<x>60</x>
 
 		<!-- The window's initial y position. Optional. -->
-		<y>100</y>
+		<y>50</y>
 
 		<!-- The window's minimum size, specified as a width/height pair in pixels, such as "400 200". Optional. -->
-		<minSize>400 300</minSize>
+		<minSize>750 500</minSize>
 
 		<!-- The window's initial maximum size, specified as a width/height pair in pixels, such as "1600 1200". Optional. -->
 		<maxSize>1600 1200</maxSize>
@@ -125,16 +125,13 @@
 
 	<!-- The icon the system uses for the application. For at least one resolution,
 	specify the path to a PNG file included in the AIR package. Optional. -->
-	<!-- <icon>
-		<image16x16></image16x16>
-		<image32x32></image32x32>
-		<image36x36></image36x36>
-		<image48x48></image48x48>
-		<image57x57></image57x57>
-		<image72x72></image72x72>
-		<image114x114></image114x114>
-		<image128x128></image128x128>
-	</icon> -->
+	<icon>
+		<image48x48>assets/logo/logo_48x48.png</image48x48>
+		<image57x57>assets/logo/logo_57x57.png</image57x57>
+		<image72x72>assets/logo/logo_72x72.png</image72x72>
+		<image114x114>assets/logo/logo_114x114.png</image114x114>
+		<image128x128>assets/logo/logo_128x128.png</image128x128>
+	</icon>
 
 	<!-- Whether the application handles the update when a user double-clicks an update version
 	of the AIR file (true), or the default AIR application installer handles the update (false).

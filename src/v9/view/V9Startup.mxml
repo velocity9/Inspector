@@ -21,13 +21,14 @@
 		</s:HGroup>
 		
 		<s:Group width="100%" height="100%">
-			<s:VGroup verticalCenter="-30" horizontalCenter="0">
-				<s:BitmapImage source="assets/logo/logo_256x256.png" />
+			<s:VGroup verticalCenter="-10" horizontalCenter="0" horizontalAlign="center">
+				<s:BitmapImage source="assets/logo/logo.png" width="150" height="150" />
 				<s:Label
 					text="Drop SWF or SWC file here"
 					fontFamily="helvetica"
 					fontSize="24"
-					color="0x888888"/>
+					color="0x888888"
+					paddingTop="20"/>
 			</s:VGroup>
 		</s:Group>
 		

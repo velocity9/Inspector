@@ -64,7 +64,7 @@
 	<s:Rect left="0" top="0" right="0" bottom="0">
 		<s:fill>
 			<s:SolidColor
-				color="#FFFFFF"
+				color="#ffffff"
 				color.hovered="#dbf3ff" 
 				color.selected="#caebff" />
 		</s:fill>
@@ -73,9 +73,9 @@
 		<s:fill>
 			<s:SolidColor
 				alpha="1"
-				color="#DDDDDD"
-				color.hovered="#DDDDEE"
-				color.selected="#D4D4EE" />
+				color="#dddddd"
+				color.hovered="#ddddee"
+				color.selected="#d4d4ee" />
 		</s:fill>
 	</s:Rect>
 
